@@ -1,6 +1,6 @@
 ---
 name: build
-description: Use when a goal card or a clear build request exists and code must change, or a failure has no known cause. Plans when complex, implements surgically at agreed seams, fixes the canonical cause, proves the change, and hands the diff to review. Not for reviewing.
+description: Use when implementing a feature, fixing a bug, refactoring or migrating code. Take the smallest correct path, investigate unknown causes, and complete scoped repairs, review and verification.
 argument-hint: "[goal card | what to build | the failure] [--tickets] [--no-review]"
 ---
 

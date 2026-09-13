@@ -1,6 +1,6 @@
 ---
 name: intel
-description: Use when the user brings a question to research, docs or API facts to gather, or reading legwork to delegate while the session keeps working. Spins up a background subagent that reads primary sources, traces every claim to its owner, and writes findings to one cited Markdown file. Not for locating code inside this repo.
+description: Use when a research question needs evidence from official documentation, specifications, source code or first-party APIs. Delegate the investigation and produce a Markdown brief with inline source citations.
 argument-hint: "[the question to research] [--out <file>]"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: review
-description: Use when a diff needs review and repair, or reviewers left comments on a PR. Verifies and fixes defects within the requested outcome, using local review for bounded changes and subagents when useful. Not for unrelated improvements; explicit read-only requests and repository audits do not edit.
+description: Use when reviewing a code change, auditing a repository or addressing PR feedback. Verify findings, repair in-scope defects by default, and check the result. Explicit read-only reviews and repository audits report without edits.
 argument-hint: "[baseline] [--fix] [--read-only] [--pr] [--address <pr>] [--repo [path]] [--debt] [--no-simplify]"
 ---
 

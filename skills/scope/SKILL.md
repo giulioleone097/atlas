@@ -1,6 +1,6 @@
 ---
 name: scope
-description: Use when work arrives as an issue, PR, URL, report, image, handoff or atlasme file, or a change needs scoping or has unresolved outcome, contract or ownership decisions. Establishes the goal and hands it to build. Not for a small understood change covered by core's short path.
+description: Use when incoming work needs source verification, a bounded outcome or acceptance criteria. Read the issue, document or handoff, resolve material unknowns, and prepare the task for implementation.
 argument-hint: "[task | issue number | url | file | pasted text] [--card-only] [--reply]"
 ---
 

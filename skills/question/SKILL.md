@@ -1,6 +1,6 @@
 ---
 name: question
-description: Use when a decision is blocked on knowledge that lives in someone else's head. Turns the gap into a Markdown questionnaire the user hands to that person to fill async or together over a meeting, grilling the user only on who it goes to and what they need back. Not for questions the user or the repository can already answer.
+description: Use when a decision depends on information another person holds. Prepare a focused, prioritized questionnaire with enough context and answer space for an asynchronous reply or a meeting.
 argument-hint: "[decision or topic that's blocked] [--out <file>]"
 ---
 

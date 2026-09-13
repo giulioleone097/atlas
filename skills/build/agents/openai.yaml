@@ -1,7 +1,7 @@
 interface:
   display_name: "Build"
-  short_description: "Implement the goal card at agreed seams, prove it, hand the diff to review"
-  default_prompt: "Use $build on this card: plan if complex, debug if the cause is unknown, implement surgically, prove the acceptance check, then continue into review."
+  short_description: "Implement, fix and verify the requested code change"
+  default_prompt: "Use $build to complete this change. Keep small work local, plan or delegate only when useful, fix the shared cause, review the result and run the relevant proof."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

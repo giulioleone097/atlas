@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Use when the user says ship it, commit this, open a PR, write the PR body, or asked up front to carry the work through. Commits proven work, writes the approval dossier, keeps one durable lesson. Not for unproven work; a session stopping early calls handoff.
+description: Use when committing verified work, pushing changes, opening a PR or preparing its description. Perform only the authorized delivery steps; dossier and retrospective requests can run independently.
 argument-hint: "[--push] [--pr] [--dossier [pr] [--lang <code>] [--out <file>] [--post] [--walkthrough]] [--learn [--from-pr <n>]]"
 ---
 

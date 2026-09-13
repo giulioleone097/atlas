@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Use when improving codebase health beyond one diff through structural deepening, simplification, measured optimization or audit.
+description: Use when assessing codebase structure or choosing a broader improvement. Route simplification, measured optimization and audits to their procedures; investigate structural problems and propose a bounded change.
 argument-hint: "[what to make healthier: a direction, a subsystem or a planned change]"
 ---
 

@@ -1,7 +1,7 @@
 interface:
   display_name: "Question"
-  short_description: "Turn a decision blocked on someone else's knowledge into a Markdown questionnaire to hand them"
-  default_prompt: "Use $question on this decision: grill me only on who it goes to and what I need back, then draft the discovery questionnaire and write it to docs/."
+  short_description: "Prepare a questionnaire for someone holding missing facts"
+  default_prompt: "Use $question to prepare a questionnaire for this decision. Establish the recipient and required answers from available context, ask only what is missing, and write the questions to the requested destination."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Use when a design question code review can't answer needs settling before real work starts — which interaction model works, does this state machine feel right, what should this screen look like. Not for a design already validated and ready to implement.
+description: Use when a design decision needs an interactive experiment. Build disposable logic or UI variants, let the user exercise them, and use the observed verdict to guide implementation.
 argument-hint: "[the design question, state machine or UI to prototype]"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: howto
-description: Use when an effort is too big for one session, a loose idea in fog with more open decisions than one atlasme pass can close. Charts the decisions as a map of nodes with blocking edges, resolves the frontier one node at a time by running atlasme on it, and updates the map file so a later session resumes mid-map. Not for a subject atlasme alone can settle.
+description: Use when an initiative has dependent decisions that span several sessions. Map what must be settled first, resolve the next available decision, and preserve the map for resumption.
 argument-hint: "[the effort to chart] [--out <file>]"
 ---
 

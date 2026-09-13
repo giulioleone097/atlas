@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Use when the user says hand off, handoff, stop here, or pick this up later, or when a session must stop before the work is done. Writes where the work stands, what is proven, what is open and which skill the next session calls first, pointing at artifacts instead of repeating them. Not for finished work; ship commits that.
+description: Use when unfinished work must continue in another session. Save the current branch, edits, verified results, settled decisions, blockers and exact next action without duplicating existing artifacts.
 argument-hint: "[what the next session is for] [--out <file>]"
 ---
 

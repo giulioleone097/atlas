@@ -1,7 +1,7 @@
 interface:
   display_name: "Ship"
-  short_description: "Commit proven work, write the dossier, keep the lesson; push or PR only if asked"
-  default_prompt: "Use $ship: commit the proven changes as atomic commits; add --push or --pr only when I asked; --dossier for the approval dossier alone."
+  short_description: "Deliver verified changes or prepare a PR description"
+  default_prompt: "Use $ship for the delivery steps already requested. Commit verified changes, push or open a PR when authorized, and handle a dossier-only request without committing unrelated work."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true
