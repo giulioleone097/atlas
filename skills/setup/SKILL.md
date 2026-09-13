@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Use when the user asks to install or remove project rules, or discovery needs a missing or outdated map. Installs the doctrine only on explicit invocation; otherwise refreshes relevant map facts. Not for routine edits with known locations.
+description: Use when explicitly asked to install or remove Atlas project instructions, or when discovery needs a repository map. Implicit map refreshes must use setup --map and leave project instructions untouched.
 argument-hint: "[project-dir] [--map] [--refresh] [--prs N] [--linked] [--remove]"
 ---
 

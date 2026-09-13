@@ -1,6 +1,6 @@
 ---
 name: optimize
-description: Use when the user asks to optimize, speed up, shrink or push a measured number toward a target, such as latency, throughput, memory, bundle size, cost or a score. Runs rounds of distinct hypotheses in parallel worktrees against one metric, keeps only what beats the baseline beyond noise, and stops at the target or after two dry rounds. Not for work without a number to move.
+description: Use when improving a measurable performance, resource or quality metric. Compare hypotheses against a baseline and guard limits, retain changes that beat noise, and verify the result.
 argument-hint: "<what to optimize> --metric <command> [--higher] [--target <n>] [--guard <command> <max>]... [--paths <globs>] [--rounds <n>] [--parallel <k>] [--out <file>] [--no-review]"
 ---
 

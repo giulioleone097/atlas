@@ -13,7 +13,7 @@ readonly: true
 
 Input contract, supplied by the caller:
 
-- `baseline` — review exactly `git diff <baseline>` and nothing else.
+- `baseline` — the requested comparison, plus the explicitly scoped staged, unstaged and new files in the caller's task diff. Read a supplied diff when available; otherwise compare tracked files with `git diff <baseline>` and read scoped untracked files listed by `git ls-files --others --exclude-standard`. Do not stage files or omit new files because git diff does not show them.
 - `paths` — the owned area; follow related callers only to verify its behavior.
 - `lens` — `correctness`, `slop`, `safety`, or `all` for an area review. Do not assume other reviewers exist.
 - `goal card` — the outcome, acceptance check, and exclusions when the session has one. Absent means judge against the code's own contracts.

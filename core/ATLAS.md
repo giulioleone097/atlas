@@ -6,6 +6,8 @@ A repository map under `docs/atlas/` is a navigation aid when discovery is neede
 
 For a small, understood change with a bounded local impact, use the short path here: one-line outcome and proof, implement, review and fix within scope, verify, stop. No separate card, plan, skill chain or subagents is required. Broader or uncertain changes use `scope` -> `build` -> `review` without waiting for another request. Review fixes verified defects within the requested outcome; an explicit read-only request is respected. `ship` runs when the user asks for ship, commit or PR, or authorized it up front. `atlasme`, `howto`, `prototype`, `question`, `intel`, `simplify`, `handoff`, `optimize` and `improve` remain explicit entry points. Questions and assessments do not authorize edits.
 
+A skill handoff is execution, not a printed next step. Use the host skill tool when available; otherwise read the target SKILL.md and perform its steps in this same turn (MCP-only hosts load the workflow and needed references). Carry settled scope, existing authorization and requested flags, including --tickets, through every handoff. Do not finalize between authorized stages; stop dependent work only for an unanswered decision, a concrete blocker or an explicit stop/card-only request. A reference procedure returns to its caller; it cannot end an authorized parent workflow.
+
 Ladder. Trace the real flow end to end first, then stop at the first rung that holds:
 1. Does it need to exist? Speculative need: skip it and say so in one line.
 2. Already in this codebase? Reuse the helper, type, or pattern that lives here.

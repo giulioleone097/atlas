@@ -1,7 +1,7 @@
 interface:
   display_name: "Review"
-  short_description: "Review and fix within scope; delegate only when useful"
-  default_prompt: "Use $review on this diff: verify and fix real in-scope defects, remove unnecessary complexity, preserve useful boundaries, then prove the result. Review locally unless independent areas justify subagents."
+  short_description: "Review code, repair scoped defects and verify the result"
+  default_prompt: "Use $review on this change or requested audit. Verify findings against the code, honor read-only scope, otherwise fix supported in-scope defects and run the relevant checks."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

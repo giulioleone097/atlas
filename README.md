@@ -3,7 +3,7 @@
 <img src="assets/icon.png" alt="Atlas icon" width="128" />
 
 One plugin for the whole development loop, for Claude Code, Codex, Devin and
-Cursor. Lock the
+Cursor, with a native skills-and-rules adapter for Antigravity. Lock the
 outcome, take the shortest safe path, prove only changed behavior, stop. Five
 stages carry setup through ship, nine entry points are typed by name (atlasme,
 simplify, handoff, optimize, intel, question, howto, prototype, improve);
@@ -71,6 +71,17 @@ local checkout). The `.cursor-plugin/plugin.json` manifest wires skills,
 sh /path/to/atlas/scripts/install-cursor.sh    # --remove reverts
 ```
 
+### ChatGPT and other MCP clients
+
+The [native-skill exporter](integrations/chatgpt/README.md) prepares separate
+Atlas and Spotter skill bundles, each with its doctrine and internal procedures.
+Upload and installation depend on the ChatGPT account's Skills support.
+
+The optional [workflow MCP bridge](integrations/mcp/README.md) serves one plugin
+per process. Connect Atlas and Spotter through separate Secure MCP Tunnels and
+custom apps. MCP tools do not install native skills; hooks, automatic per-turn
+instructions and local execution still require host support.
+
 ### Checks
 
 `sh scripts/check.sh` — the one-command acceptance run (validates, guard
@@ -107,22 +118,24 @@ parallel hypotheses that keep only what beats the baseline.
 
 ## Skills
 
-| skill | use when | what it does |
+| Skill | Use when | Result |
 |---|---|---|
-| `setup` | a project needs atlas's local rules, or its map is missing or stale | doctrine block in AGENTS.md, CLAUDE.md import, map pointer (only when you typed it); `docs/atlas/map.md` and `conventions.md` from git, the tracker and the reviewers' comments, with a stamp; `--map` refreshes only |
-| `scope` | work arrives: a task, an issue, a PR, a report, a screenshot, a handoff or atlasme file, an idea | intake for a tracker item, an image or a resume file (forge and CLI from `tracker.sh`, read, reproduce the claim, check already-done and already-rejected, reuse what a handoff proved and honour what it decided; `--reply` posts the result or the questions back on the item after your confirmation), atlasme for an undecided design, reach of a touched contract measured (`git grep`, `consumers.sh`) or reused from the atlasme file before Risk and Size, then the goal card with its Source line (forge#n, PR, path, pasted, or `request`); typed with no argument and no request in the conversation it offers to resume the latest handoff; hands to build |
-| `build` | a card exists and code must change, or a failure has no known cause | an issue, URL, image, handoff or atlasme file goes back through `scope` first; plan when complex (a brief in chat, a file under `docs/plans/` for four or more tasks, several owners or a risk surface; `--tickets` publishes), debug when the cause is unknown, mode references for fix, refactor and migrate, UI taste when a visual decision is made, parallel workers in their own worktrees (seeded with your uncommitted work, integrated back as a diff) when their builds or tests would collide, indispensable tests only, run red before green in a detached worktree of `HEAD` when the code already exists, the card's proof command run as written, else proof from the repository's own commands and a real picture for a UI change; hands to review unless `--no-review`, which skips only that handoff |
-| `review` | a change is built, or a branch, PR or tree needs review, or reviewers left comments | the task's diff, or on a clean branch the diff against the default branch; shrink within scope (the slop catalog names what to cut and what stays), economical reviewers only when useful, verify reports and fix real in-scope defects by default, sweep consumers in and out of the repository when external contracts change, checks with failures attributed to the baseline; `--pr` posts one thread per finding at its line in the branch's PR (drafted to a file when there is no PR, CLI or login), `--address <pr>` checks out the PR's head when the tree is clean and answers the reviewers' threads from the code (fixed, landing through `ship --push`; rebutted with evidence; or follow-up); `--fix`, `--read-only` (cuts and fixes as proposals, nothing applied), `--repo`, `--debt` |
-| `atlasme` | you say grill me, or bring an idea, plan, file, issue or PR still undecided | typed bare, asks what to grill; reads a document or item first and grills only what it leaves open; the decision tree worked in rounds through the host's question tool, facts looked up itself, every option costed by its reach at HEAD (domains from the map, consumers counted, linked repositories, a code-graph impact query when exposed), the recommendation first on every question; the settled tree carries reach and risk per decision and one map when more than one domain is reached; ends by asking build now, card only or stop; card only, stop and `--out` write the settled tree to disk so `scope <file>` resumes it |
-| `simplify` | you ask to simplify, shrink or de-slop code outside a review, or `--repo` / `--debt` | the files named, else the diff since the baseline or merge-base plus staged, unstaged and new files; the six rungs (reuse, stdlib, native, delete, yagni, shrink) per area, `slop` reviewers proposing when there are several, then the nearest check or the integrator proving nothing moved; never runs review |
-| `handoff` | you say hand off, stop here, pick this up later, or a session stops before the work is done | where the work stands (branch, tree, workers' worktrees), proven lines with their command and result, open items as work, decisions only the conversation carries, artifacts pointed at rather than copied, the skill the next session calls first; written to `--out <file>` or `docs/handoff-<date>-<slug>.md`, `scope <file>` resumes it and `ship` deletes it once the work is committed |
-| `optimize` | you ask to speed up, shrink or push a measured number toward a target | one `--metric` command that starts what it measures from the checkout, `--paths` for what may change (asked for when neither flag nor request names them); the baseline measured in a detached worktree of `HEAD` that stays as the champion tree, re-measured every round; rounds of distinct hypotheses (one family each) in parallel `git worktree`s, each measured three times; a candidate is kept only when it beats the baseline beyond the noise band, passes the regression check and narrows nothing the metric measures; families named from a profile of the metric when the stack has a profiler, `--guard <command> <max>` metrics that must stay under a maximum (memory, size, p99), runs raised from three to five or seven when the noise band is too wide for the target; stops at the target, after two dry rounds of new families, or at the budget, and a stopped run's `optimize/<slug>` branch blocks the next until landed or deleted; every run ends with `kpi:` lines (baseline to final, rounds, hypotheses, kept, wall time, regression) in the ledger and the report; the kept diff goes to `review`, and a review edit is re-measured |
-| `intel` | a question needs an answer grounded in primary sources before work continues | a background subagent investigates the question against primary sources and writes one cited Markdown file; never edits code |
-| `question` | a decision is blocked on another person's knowledge, not on more digging | the open questions become `docs/question-<slug>.md`, one document handed to the person who holds the answers |
-| `howto` | a multi-session effort needs a map of the decisions still open | `docs/howto-<date>-<slug>.md`, a map of decision nodes resolved one at a time through `atlasme` |
-| `improve` | the codebase should get healthier — deepen, de-slop, speed up or audit a tree | dispatches to `simplify`, `optimize` or `review --repo/--debt/--rules`; a structural ask runs the deepening survey (git-churn bias, deletion test, report cards to `docs/improve-<date>-<slug>.md`) and hands the pick to `atlasme`; never edits code |
-| `prototype` | a design question needs a throwaway UI to answer it, not production code | HTML/UI variants built to answer the question, compared, then discarded; never committed |
-| `ship` | you say ship, commit, PR, dossier, or asked up front to carry it through | atomic Conventional Commits (scope only when recent commits carry one), tracker item linked, `--pr` with the approval dossier as body (minimal: verdict, one map, one diagram per domain, real e2e screenshots or videos attached where the forge hosts them, in the repository's language or `--lang`; on the default branch a `<type>/<slug>` branch is created first, an open PR is reused, on Azure DevOps the drill-down goes as closed threads), `--dossier [pr]` alone on GitHub, GitLab or Azure DevOps (`--post` replaces the body, `--walkthrough` GitHub only), commit language from the repository's recent commits, CI awaited after `--pr` with failures attributed to base or new, one durable lesson (`--learn`, `--from-pr <n>`; `proposed (not written)` on a hands-off run), the handoff or atlasme file the work resumed from deleted; the block ends with `proof:`, `learned:` and `left:` naming what was kept out; push only with `--push` |
+| `atlasme` | an idea or design needs clarification before implementation | Clarify an idea and resolve its open design decisions |
+| `build` | implementing a feature, fixing a bug, refactoring or migrating code | Implement, fix and verify the requested code change |
+| `handoff` | unfinished work must continue in another session | Save unfinished work for a reliable next session |
+| `howto` | an initiative has dependent decisions that span several sessions | Map dependent decisions across multiple sessions |
+| `improve` | assessing codebase structure or choosing a broader improvement | Assess codebase structure and choose an improvement |
+| `intel` | a research question needs evidence from official documentation, specifications, source code or first-party APIs | Research a question and produce a cited evidence brief |
+| `optimize` | improving a measurable performance, resource or quality metric | Improve a measured metric while preserving guard limits |
+| `prototype` | a design decision needs an interactive experiment | Test a design with disposable logic or UI prototypes |
+| `question` | a decision depends on information another person holds | Prepare a questionnaire for someone holding missing facts |
+| `review` | reviewing a code change, auditing a repository or addressing PR feedback | Review code, repair scoped defects and verify the result |
+| `scope` | incoming work needs source verification, a bounded outcome or acceptance criteria | Verify incoming work and define its outcome and proof |
+| `setup` | explicit installation/removal of project instructions, or discovery via `setup --map` | Configure Atlas project rules or refresh its repository map |
+| `ship` | committing verified work, pushing changes, opening a PR or preparing its description | Deliver verified changes or prepare a PR description |
+| `simplify` | simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit | Simplify scoped code while preserving its behavior |
+
+After `atlasme` settles an authorized implementation request, Atlas executes `scope` → `build` → `review` in the same turn. When ticket creation was requested (`--tickets` or ordinary language), that intent travels through the card into build's planning procedure; it publishes missing tasks or reports local drafts when tracker access is unavailable, then implementation continues. Merely printing the next skill is not a completed handoff. Card-only and assessment-only requests retain their stop boundary.
 
 Every stage keeps its branches in `references/`: the root file is a router, read in full, and a branch is read only when its case applies.
 
@@ -146,7 +159,7 @@ Every stage keeps its branches in `references/`: the root file is a router, read
 
 ## Scripts
 
-Four detectors make the skills run the repository's own commands instead of guessing. Each reads the tree, prints key=value lines, and never changes anything; every skill that needs one names it.
+Seven read-only helpers let the skills use the repository's own commands instead of guessing. Each reads repository facts or diffs and returns structured or line-oriented output; every skill that needs one names it.
 
 | Script | Answers | Used by |
 |---|---|---|
@@ -158,7 +171,7 @@ Four detectors make the skills run the repository's own commands instead of gues
 | `scripts/debt.sh [repo]` | the ledger of declared shortcuts: every `ceiling:` comment with its limit and upgrade trigger, `no-trigger` on the ones that will rot | `review --debt`, `setup` (map) |
 | `scripts/pr-partition.py BASE HEAD` | the diff split into judgment, tests, mechanical, generated, docs and config, so only judgment code is read | `review`, `ship` (dossier) |
 
-`scripts/check.sh` is the plugin's own acceptance: four strict validations, the guard fixtures, manifest parity, doctrine sync, per-host hook event rules, and the repository rules executed (skill bodies under 120 lines, references under 80, no host env var inside a skill, every script parses, both detectors answer on this repo).
+`scripts/check.sh` is the plugin's own acceptance: four strict validations, the guard fixtures, manifest parity, doctrine sync, per-host hook event rules, and the repository rules executed (skill bodies under 120 lines, references under 80, no host env var inside a skill, every script parses, tracker, checks and debt detectors answer on this repo).
 
 ## Hooks
 
@@ -268,3 +281,7 @@ star counts and rejected alternatives.
 ## License
 
 MIT — see [`LICENSE`](LICENSE).
+
+## Antigravity
+
+Run `sh scripts/install-antigravity.sh` for a global native plugin at `~/.gemini/config/plugins/atlas`. It includes skills, their references/helpers and the canonical doctrine as a plugin rule. Re-run after updating Atlas; open a new session to load it. This adapter does not register hooks or custom agents; use the host capabilities actually available. The directory follows [Antigravity plugin documentation](https://www.antigravity.google/docs/plugins).

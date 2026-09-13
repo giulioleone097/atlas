@@ -1,7 +1,7 @@
 interface:
   display_name: "Setup"
-  short_description: "Install the doctrine into this project and build its repository map"
-  default_prompt: "Use $setup on this project: install the doctrine block, the CLAUDE.md import and the map pointer, then build docs/atlas/map.md and conventions.md."
+  short_description: "Configure Atlas project rules or refresh its repository map"
+  default_prompt: "Use $setup for the requested project operation. Install or remove instructions only when explicitly requested; for implicit discovery use $setup --map and leave project instructions untouched."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

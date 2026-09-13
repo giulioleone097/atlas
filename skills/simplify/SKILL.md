@@ -1,6 +1,6 @@
 ---
 name: simplify
-description: Use when the user asks to simplify, shrink or de-slop code outside a review, or to audit a tree with --repo, --debt or --rules. Makes the code smaller without changing behavior through six rungs, per area, and proves nothing moved. Not for bugs or new behavior; the loop's review already shrinks what it reviews.
+description: Use when simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit. Remove demonstrated unnecessary complexity within scope and verify the result; audits report proposals.
 argument-hint: "[baseline | files] [--repo [path]] [--debt] [--rules]"
 ---
 

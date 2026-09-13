@@ -1,6 +1,6 @@
 ---
 name: howto
-description: Use when an effort is too big for one session, a loose idea in fog with more open decisions than one atlasme pass can close. Charts the decisions as a map of nodes with blocking edges, resolves the frontier one node at a time by running atlasme on it, and updates the map file so a later session resumes mid-map. Not for a subject atlasme alone can settle.
+description: Use when an initiative has dependent decisions that span several sessions. Map what must be settled first, resolve the next available decision, and preserve the map for resumption.
 argument-hint: "[the effort to chart] [--out <file>]"
 ---
 
@@ -12,13 +12,13 @@ argument-hint: "[the effort to chart] [--out <file>]"
 
 4. The frontier is every unsettled node whose blocking nodes are all settled. An empty frontier with unsettled nodes still on the map means the map is wrong (a cycle, or a node that will never sharpen on its own): say so and stop. An empty frontier with none left: the way is clear, go to step 6.
 
-5. Resolve exactly one frontier node this session, unless a second is a fact one bounded search settles outright: invoke `atlasme` on that node's question alone (Skill tool `atlas:atlasme`, `$atlasme` on Codex; its question-tool contract lives in `<plugin root>/skills/scope/references/asking.md`, its reach-costing in `<plugin root>/skills/scope/references/atlasme.md`). Take its settled tree as the answer, mark the node settled on the map, and recompute the frontier. A resolution that sharpens a previously vague area turns that area into new nodes added to the map, not resolved in the same session.
+5. Resolve exactly one frontier node this session, unless a second is a fact one bounded search settles outright: invoke `atlasme --decision-only` on that node's question alone (Skill tool `atlas:atlasme`, `$atlasme` on Codex; its question-tool contract lives in `<plugin root>/skills/scope/references/asking.md`, its reach-costing in `<plugin root>/skills/scope/references/atlasme.md`). Take its settled tree as the answer, mark the node settled on the map, and recompute the frontier. A resolution that sharpens a previously vague area turns that area into new nodes added to the map, not resolved in the same session.
 
-6. Write the map to `--out <file>` when given, otherwise `docs/howto-<yyyy-mm-dd>-<slug>.md`, reusing the file just read in step 1 once one exists rather than starting a second map for the same subject. Head it `# Howto: <subject>` and print the path.
+6. Write the map to `--out <file>` when given, otherwise `docs/howto-<yyyy-mm-dd>-<slug>.md`, reusing the file just read in step 1 once one exists rather than starting a second map for the same subject. Head it `# Howto: <subject>`. For an unsettled frontier, `next:` names the node and calls `howto <this map>`, which retains map ownership while using `atlasme --decision-only`. For a clear map, `next:` calls `scope <this map>`. Print the path.
 
 ```
 # Howto: <subject>
-next: <the next frontier node to resolve, or "clear - hand to scope"> - call `atlasme` on it
+next: <frontier node or clear> - call <howto or scope, as above> with <this map>
 
 ## Destination
 <what reaching the end of this map looks like, one or two lines>
@@ -31,4 +31,4 @@ next: <the next frontier node to resolve, or "clear - hand to scope"> - call `at
 - <node or area ruled out, and why>
 ```
 
-7. Stop once the file is written and its path printed, whether the frontier is empty or not. Do not resolve a second node in the same session, and do not start building: an empty frontier hands off to `scope` on the settled map (Skill tool `atlas:scope`, `$scope` on Codex) only once the user asks to proceed.
+7. Stop once the file is written and its path printed, whether the frontier is empty or not. Do not resolve a second node in the same session or invoke build directly: an empty frontier hands off to `scope` on the settled map (Skill tool `atlas:scope`, `$scope` on Codex) when implementation was already requested or the user asks to proceed; otherwise return the map.
