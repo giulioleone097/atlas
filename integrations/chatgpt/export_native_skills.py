@@ -129,6 +129,22 @@ def referenced_root_helpers(source: Path, name: str) -> set[str]:
     return helpers
 
 
+def wiki_runtime_files(source: Path) -> tuple[Path, ...]:
+    """Return the minimal runtime closure required by scripts/wiki.sh."""
+
+    relative_paths = (
+        Path("runtime/spotter_wiki/__init__.py"),
+        Path("runtime/spotter_wiki/__main__.py"),
+        Path("runtime/spotter_wiki/store.py"),
+        Path("runtime/LICENSE.llm-wiki-kit"),
+    )
+    files = tuple(source / relative for relative in relative_paths)
+    for path in files:
+        if not path.is_file() or safe_relative(path, source) is None:
+            raise ValueError(f"Spotter wiki helper requires a safe runtime file: {path}")
+    return files
+
+
 def export_package(name: str, source: Path, output: Path) -> Path:
     if not source.is_dir():
         raise ValueError(f"source directory is missing: {source}")
@@ -199,10 +215,17 @@ def export_package(name: str, source: Path, output: Path) -> Path:
         else:
             shutil.copy2(source_file, destination)
 
-    for helper in referenced_root_helpers(source, name):
+    root_helpers = referenced_root_helpers(source, name)
+    for helper in root_helpers:
         source_file = source / "scripts" / helper
         if source_file.is_file() and safe_relative(source_file, source) is not None:
             destination = package / "scripts" / helper
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source_file, destination)
+
+    if name == "spotter" and "wiki.sh" in root_helpers:
+        for source_file in wiki_runtime_files(source):
+            destination = package / source_file.relative_to(source)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source_file, destination)
 
@@ -250,6 +273,26 @@ def check_bundle(bundle: Path, source: Path) -> list[str]:
     for helper in referenced_root_helpers(source, bundle.name):
         if not (package / "scripts" / helper).is_file():
             errors.append(f"{bundle}: missing referenced root helper scripts/{helper}")
+    wiki_helper = package / "scripts" / "wiki.sh"
+    if wiki_helper.is_file():
+        if bundle.name != "spotter":
+            errors.append(f"{bundle}: wiki.sh is only supported by the Spotter runtime")
+        else:
+            runtime_files = wiki_runtime_files(source)
+            expected_runtime = {
+                source_file.relative_to(source).as_posix() for source_file in runtime_files
+            }
+            actual_runtime = {
+                file.relative_to(package).as_posix()
+                for file in (package / "runtime").rglob("*")
+                if file.is_file()
+            }
+            for source_file in runtime_files:
+                exported = package / source_file.relative_to(source)
+                if not exported.is_file():
+                    errors.append(f"{bundle}: missing wiki helper dependency {exported.relative_to(bundle)}")
+            for unexpected in sorted(actual_runtime - expected_runtime):
+                errors.append(f"{bundle}: unexpected wiki runtime artifact {unexpected}")
     return errors
 
 
