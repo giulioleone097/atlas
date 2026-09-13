@@ -12,8 +12,10 @@ python3 integrations/chatgpt/export_native_skills.py \
 
 The output folder contains `atlas.zip` and `spotter.zip`. Each archive has one native
 `SKILL.md`, its canonical core, the maintained procedures and their referenced
-documents. Procedures are named `PROCEDURE.md` inside `references/package/` so an
-upload contains exactly one skill entrypoint.
+documents. The Spotter archive also carries the minimal standard-library Wiki runtime
+and its MIT attribution when its exported `scripts/wiki.sh` needs them. Procedures are
+named `PROCEDURE.md` inside `references/package/` so an upload contains exactly one
+skill entrypoint.
 
 Directory and ZIP are prepared for separate upload in ChatGPT's Skills interface.
 Verify that the account supports the upload, then complete the scan and installation
