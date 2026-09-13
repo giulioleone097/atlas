@@ -3,7 +3,7 @@
 <img src="assets/icon.png" alt="Atlas icon" width="128" />
 
 One plugin for the whole development loop, for Claude Code, Codex, Devin and
-Cursor. Lock the
+Cursor, with a native skills-and-rules adapter for Antigravity. Lock the
 outcome, take the shortest safe path, prove only changed behavior, stop. Five
 stages carry setup through ship, nine entry points are typed by name (atlasme,
 simplify, handoff, optimize, intel, question, howto, prototype, improve);
@@ -135,6 +135,8 @@ parallel hypotheses that keep only what beats the baseline.
 | `ship` | committing verified work, pushing changes, opening a PR or preparing its description | Deliver verified changes or prepare a PR description |
 | `simplify` | simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit | Simplify scoped code while preserving its behavior |
 
+After `atlasme` settles an authorized implementation request, Atlas executes `scope` → `build` → `review` in the same turn. When ticket creation was requested (`--tickets` or ordinary language), that intent travels through the card into build's planning procedure; it publishes missing tasks or reports local drafts when tracker access is unavailable, then implementation continues. Merely printing the next skill is not a completed handoff. Card-only and assessment-only requests retain their stop boundary.
+
 Every stage keeps its branches in `references/`: the root file is a router, read in full, and a branch is read only when its case applies.
 
 ## Agents
@@ -157,7 +159,7 @@ Every stage keeps its branches in `references/`: the root file is a router, read
 
 ## Scripts
 
-Four detectors make the skills run the repository's own commands instead of guessing. Each reads the tree, prints key=value lines, and never changes anything; every skill that needs one names it.
+Seven read-only helpers let the skills use the repository's own commands instead of guessing. Each reads repository facts or diffs and returns structured or line-oriented output; every skill that needs one names it.
 
 | Script | Answers | Used by |
 |---|---|---|
@@ -169,7 +171,7 @@ Four detectors make the skills run the repository's own commands instead of gues
 | `scripts/debt.sh [repo]` | the ledger of declared shortcuts: every `ceiling:` comment with its limit and upgrade trigger, `no-trigger` on the ones that will rot | `review --debt`, `setup` (map) |
 | `scripts/pr-partition.py BASE HEAD` | the diff split into judgment, tests, mechanical, generated, docs and config, so only judgment code is read | `review`, `ship` (dossier) |
 
-`scripts/check.sh` is the plugin's own acceptance: four strict validations, the guard fixtures, manifest parity, doctrine sync, per-host hook event rules, and the repository rules executed (skill bodies under 120 lines, references under 80, no host env var inside a skill, every script parses, both detectors answer on this repo).
+`scripts/check.sh` is the plugin's own acceptance: four strict validations, the guard fixtures, manifest parity, doctrine sync, per-host hook event rules, and the repository rules executed (skill bodies under 120 lines, references under 80, no host env var inside a skill, every script parses, tracker, checks and debt detectors answer on this repo).
 
 ## Hooks
 
@@ -279,3 +281,7 @@ star counts and rejected alternatives.
 ## License
 
 MIT — see [`LICENSE`](LICENSE).
+
+## Antigravity
+
+Run `sh scripts/install-antigravity.sh` for a global native plugin at `~/.gemini/config/plugins/atlas`. It includes skills, their references/helpers and the canonical doctrine as a plugin rule. Re-run after updating Atlas; open a new session to load it. This adapter does not register hooks or custom agents; use the host capabilities actually available. The directory follows [Antigravity plugin documentation](https://www.antigravity.google/docs/plugins).
