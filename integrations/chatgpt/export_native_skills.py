@@ -14,7 +14,7 @@ from zipfile import ZIP_DEFLATED, BadZipFile, ZipFile
 def bundle_entry(name: str, workflows: dict[str, str]) -> str:
     trigger = {
         "atlas": "software delivery, code review, scoped implementation, debugging, or measured optimization",
-        "spotter": "personal-life planning, a daily brief, prioritization, KPI or time review, or cross-area preparation",
+        "spotter": "personal-life planning, portable personal knowledge, a daily brief, prioritization, KPI or time review, or cross-area preparation",
     }[name]
     procedures = "\n".join(
         f"- `{workflow}` — {description} Read `references/package/skills/{workflow}/PROCEDURE.md`."
