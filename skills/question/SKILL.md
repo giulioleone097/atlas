@@ -6,9 +6,9 @@ argument-hint: "[decision or topic that's blocked] [--out <file>]"
 
 1. Take the argument as the decision or topic blocked on someone else's knowledge. Empty: ask what decision is blocked, in one line, through the host's question tool, and stop there.
 
-2. Grill the send, not the subject: ask who it goes to — the recipient's role, expertise and relationship to the user — through the host's question tool, contract in `<plugin root>/skills/scope/references/asking.md` (`<plugin root>` is the parent of the `skills/` directory this file lives in). This fixes the questionnaire's tone and how much context it must carry. Done when the recipient is known.
+2. Resolve the recipient from the request and available context; ask only if the recipient is missing or materially ambiguous. Establish who it goes to — the recipient's role, expertise and relationship to the user — through the host's question tool, contract in `<plugin root>/skills/scope/references/asking.md` (`<plugin root>` is the parent of the `skills/` directory this file lives in). This fixes the questionnaire's tone and how much context it must carry. Done when the recipient is known.
 
-3. Ask what the user needs back: the concrete decisions or facts the user can't resolve alone and must walk away with. One exchange, same question tool. Done when the list is concrete enough that each item can become one question.
+3. Reuse the answers already requested; ask only for a missing or materially ambiguous requirement. Establish what the user needs back: the concrete decisions or facts the user can't resolve alone and must walk away with. One exchange, same question tool. Done when the list is concrete enough that each item can become one question.
 
 4. Draft the questionnaire from the template below. Order questions most-important-first (async may give only one pass), group under `##` theme headings once there are more than a handful, one idea per question with an answer stub directly beneath, and a one-line "why this matters" only where the question invites a throwaway or misread answer. Every item named in step 3 maps to a question.
 

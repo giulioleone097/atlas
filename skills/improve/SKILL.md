@@ -14,4 +14,4 @@ report: <path - survey only>
 card: <the pick> -> atlasme | none picked - <survey only>
 ```
 
-Stop when the one dispatch has run or the survey report is printed and its pick handed to `atlasme`. One dispatch or one survey per run, and never an edit: the deepening a card names lands later through `scope` -> `build`.
+Stop when the one dispatch has run or the survey report is printed and its pick handed to `atlasme`. One dispatch or one survey per run. A dispatched skill completes its own authorized edits and proof; only the structural survey is read-only, with its proposed change landing later through `scope` -> `build`.

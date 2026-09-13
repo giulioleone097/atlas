@@ -1,10 +1,10 @@
 ---
 name: review
 description: Use when reviewing a code change, auditing a repository or addressing PR feedback. Verify findings, repair in-scope defects by default, and check the result. Explicit read-only reviews and repository audits report without edits.
-argument-hint: "[baseline] [--fix] [--read-only] [--pr] [--address <pr>] [--repo [path]] [--debt] [--no-simplify]"
+argument-hint: "[baseline] [--fix] [--read-only] [--pr] [--address <pr>] [--repo [path]] [--debt] [--rules] [--no-simplify]"
 ---
 
-1. Resolve scope first. `--repo` or `--debt`: read `<this skill>/references/audit.md` (`<this skill>` is the directory this file lives in) and stop there. Otherwise use the task's actual diff: the requested commit/PR range, or the in-scope staged, unstaged and new files, including work just produced by build. Preserve pre-existing edits; do not let a committed-only range hide the changes under review. Clean tree and nothing named: on a branch, `git diff <default branch>...HEAD`. Empty: say so and stop. `--read-only` or an explicit no-edit request applies no cut or fix. Otherwise repair is the default; `--fix` states that same intent explicitly.
+1. Resolve scope first. `--repo`, `--debt` or `--rules`: read `<this skill>/references/audit.md` (`<this skill>` is the directory this file lives in) and stop there. Otherwise use the task's actual diff: the requested commit/PR range, or the in-scope staged, unstaged and new files, including work just produced by build. Preserve pre-existing edits; do not let a committed-only range hide the changes under review. Clean tree and nothing named: on a branch, `git diff <default branch>...HEAD`. Empty: say so and stop. `--read-only` or an explicit no-edit request applies no cut or fix. Otherwise repair is the default; `--fix` states that same intent explicitly.
 
 2. Load the rules: the `## Code Review Rules` section of the closest AGENTS.md or CLAUDE.md covering the changed paths, nested file over root, the entries under `docs/solutions/` whose symptom or paths match the change (ship's learn step writes them there), and `docs/atlas/conventions.md` when the repository has one; what its reviewers ask for is a rule here, cited with the theme. No section and no map means no custom rules; ordinary defect finding still applies.
 
