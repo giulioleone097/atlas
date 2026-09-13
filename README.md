@@ -285,3 +285,9 @@ MIT — see [`LICENSE`](LICENSE).
 ## Antigravity
 
 Run `sh scripts/install-antigravity.sh` for a global native plugin at `~/.gemini/config/plugins/atlas`. It includes skills, their references/helpers and the canonical doctrine as a plugin rule. Re-run after updating Atlas; open a new session to load it. This adapter does not register hooks or custom agents; use the host capabilities actually available. The directory follows [Antigravity plugin documentation](https://www.antigravity.google/docs/plugins).
+
+## Native goals and loops
+
+Atlas binds work to an existing native goal and uses supported host continuation rather than a custom runner. An explicit goal request can activate the native primitive when the session permits it; ordinary work still completes without creating a goal. Request timed/event work through `setup --schedule <request>` or natural language. Goal execution and recurring triggers are separate: no schedules activate on installation.
+
+[Native lifecycle](skills/build/references/native.md) documents Codex goals/heartbeats, Claude Code goals/cron, Cursor goals/loops/Automations, Antigravity goals/schedules and Devin Scheduled Sessions. Availability is checked per operation in the receiving session; workflow MCP and ChatGPT skill uploads do not register host primitives. Existing owner references, evidence-based completion and non-overlapping execution apply across skill handoffs and host changes.

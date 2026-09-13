@@ -6,7 +6,7 @@ argument-hint: "[what the next session is for] [--out <file>]"
 
 1. Take the argument as what the next session is for. Empty: hand off the work as it stands.
 
-2. Write down where the work is, from this session and the repository, in this order: the goal card or the one-line outcome being pursued, the branch and the last commit, the working tree state (`git status --short`, plus every worktree `git worktree list` shows beyond this one, with its path and the slice whose uncommitted diff it holds, since build's parallel workers leave theirs unintegrated when a session stops mid-slice), and which stage of the loop finished last.
+2. Read `<plugin root>/skills/build/references/native.md` for native resumption/ownership. Preserve confirmed host/session/goal/job references and the last observed state without treating the handoff as live host state. Write down where the work is, from this session and the repository, in this order: the goal card or the one-line outcome being pursued, the branch and the last commit, the working tree state (`git status --short`, plus every worktree `git worktree list` shows beyond this one, with its path and the slice whose uncommitted diff it holds, since build's parallel workers leave theirs unintegrated when a session stops mid-slice), and which stage of the loop finished last.
 
 3. Point, never repeat. A plan file, a goal card written to disk, an issue, a commit message, a diff, a dossier, a ledger: name its path or URL and say what it holds. Copying it into the handoff makes two copies that will disagree by tomorrow. Only what exists solely in this conversation gets written out in full.
 

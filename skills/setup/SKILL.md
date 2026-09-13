@@ -1,10 +1,10 @@
 ---
 name: setup
-description: Use when explicitly asked to install or remove Atlas project instructions, or when discovery needs a repository map. Implicit map refreshes must use setup --map and leave project instructions untouched.
-argument-hint: "[project-dir] [--map] [--refresh] [--prs N] [--linked] [--remove]"
+description: Use when explicitly asked to install or remove Atlas project instructions, configure native scheduled work, or when discovery needs a repository map. Implicit map refreshes must use setup --map and leave project instructions untouched.
+argument-hint: "[project-dir] [--map] [--refresh] [--prs N] [--linked] [--remove] [--schedule <request>]"
 ---
 
-1. Resolve the project directory: the argument, else the git top level of the current directory, else the current directory. Refuse a home directory or `/`.
+1. `--schedule` or an explicit loop/schedule management request: run `<plugin root>/skills/build/references/native.md` for that intent, report its verified state or missing capability and return without installing doctrine, mapping the repository or starting the scheduled workload. Otherwise resolve the project directory: the argument, else the git top level of the current directory, else the current directory. Refuse a home directory or `/`.
 
 2. `--map` means the model invoked this to refresh the map: skip to step 5 and touch nothing else. `--remove` means the user asked to take atlas back out: run `python3 <this skill>/scripts/upsert-agents.py <project-dir> --remove` — it deletes the doctrine block from `AGENTS.md` (the whole file when it is still the untouched skeleton) and the `CLAUDE.md` import, reports each status, and leaves `docs/atlas/` for manual deletion — then print the result block and stop. Without `--map` or `--remove` the user typed it: continue.
 
