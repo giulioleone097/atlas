@@ -1,7 +1,8 @@
 # ChatGPT native-skill exports
 
-`export_native_skills.py` produces two independent upload bundles from the canonical
-Atlas and Spotter repositories:
+`export_native_skills.py` produces independent upload bundles from the canonical
+Atlas and Spotter repositories. Add `--plugin NAME=PATH` for another manifest-backed
+plugin; for example, Jobs Engine Seeker:
 
 ```sh
 python3 integrations/chatgpt/export_native_skills.py \
@@ -10,9 +11,21 @@ python3 integrations/chatgpt/export_native_skills.py \
   --output /path/to/chatgpt-skills
 ```
 
-The output folder contains `atlas.zip` and `spotter.zip`. Each archive has one native
+```sh
+python3 integrations/chatgpt/export_native_skills.py \
+  --atlas-root /path/to/atlas \
+  --spotter-root /path/to/spotter \
+  --plugin jobs-engine-seeker=/Users/giulioleone/plugins/jobs-engine-seeker \
+  --output /path/to/chatgpt-skills
+```
+
+The output folder contains `atlas.zip`, `spotter.zip`, and one ZIP for each optional
+plugin. Each archive has one native
 `SKILL.md`, its canonical core, the maintained procedures and their referenced
-documents. The Spotter archive also carries the minimal standard-library Wiki runtime
+documents. The Jobs Engine Seeker archive derives its UI metadata from its Codex
+manifest and carries only the public fixture-engineering runtime closure; it excludes
+operational workspaces, ledgers, reports, CVs, environment files, and credentials. The
+Spotter archive also carries the minimal standard-library Wiki runtime
 and its MIT attribution when its exported `scripts/wiki.sh` needs them. Procedures are
 named `PROCEDURE.md` inside `references/package/` so an upload contains exactly one
 skill entrypoint.
@@ -33,7 +46,9 @@ Rebuild after changes to either source repository, then validate the exported sh
 ```sh
 python3 integrations/chatgpt/export_native_skills.py \
   --atlas-root /path/to/atlas --spotter-root /path/to/spotter \
+  --plugin jobs-engine-seeker=/Users/giulioleone/plugins/jobs-engine-seeker \
   --output /path/to/chatgpt-skills --check
 python3 <skill-creator>/scripts/quick_validate.py /path/to/chatgpt-skills/atlas
 python3 <skill-creator>/scripts/quick_validate.py /path/to/chatgpt-skills/spotter
+python3 <skill-creator>/scripts/quick_validate.py /path/to/chatgpt-skills/jobs-engine-seeker
 ```

@@ -1,7 +1,7 @@
 # Atlas workflows MCP bridge
 
 This is a small read-only stdio server for using one explicitly installed
-Atlas or Spotter workflow package through an MCP client. It takes a fixed
+Atlas, Spotter or Jobs Engine Seeker workflow package through an MCP client. It takes a fixed
 startup snapshot of the canonical core doctrine and skill Markdown; callers can
 list skills, load one with its core doctrine, then read a package-relative
 reference.
@@ -17,6 +17,7 @@ Launch one server per plugin, with an explicit package root:
 ```sh
 .venv/bin/python server.py --plugin atlas=/path/to/atlas
 .venv/bin/python server.py --plugin spotter=/path/to/spotter
+.venv/bin/python server.py --plugin jobs-engine-seeker=/path/to/jobs-engine-seeker
 ```
 
 Optionally, a Spotter server can expose one locally configured private wiki. The

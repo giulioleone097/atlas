@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
 import shutil
 import sys
@@ -11,21 +13,77 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, BadZipFile, ZipFile
 
 
-def bundle_entry(name: str, workflows: dict[str, str]) -> str:
+def plugin_metadata(name: str, source: Path) -> dict[str, str]:
+    defaults = {
+        "atlas": {
+            "display_name": "Atlas",
+            "short_description": "Code delivery and review workflows",
+            "description": "software delivery, code review, scoped implementation, debugging, or measured optimization",
+            "icon": "assets/icon.png",
+            "color": "#2563EB",
+            "default_prompt": "Use $atlas for this request.",
+            "version": "",
+        },
+        "spotter": {
+            "display_name": "Spotter",
+            "short_description": "Whole-life planning and review",
+            "description": "personal-life planning, portable personal knowledge, a daily brief, prioritization, KPI or time review, or cross-area preparation",
+            "icon": "assets/icon.png",
+            "color": "#0F766E",
+            "default_prompt": "Use $spotter for this request.",
+            "version": "",
+        },
+    }
+    if name in defaults:
+        return defaults[name]
+
+    manifest = source / ".codex-plugin" / "plugin.json"
+    if not manifest.is_file() or safe_relative(manifest, source) is None:
+        raise ValueError(f"plugin manifest is missing: {manifest}")
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"invalid plugin manifest: {manifest}") from error
+    interface = data.get("interface", {})
+    if data.get("name") != name or not all(isinstance(data.get(key), str) and data[key] for key in ("name", "version", "description")):
+        raise ValueError(f"plugin manifest has incomplete metadata: {manifest}")
+    icon = interface.get("composerIcon") or interface.get("logo")
+    if not all(isinstance(interface.get(key), str) and interface[key] for key in ("displayName", "shortDescription")) or not isinstance(icon, str):
+        raise ValueError(f"plugin manifest has incomplete interface metadata: {manifest}")
+    icon_relative = Path(icon)
+    icon_path = source / icon_relative
+    if icon_relative.is_absolute() or not icon_path.is_file() or safe_relative(icon_path, source) is None:
+        raise ValueError(f"plugin manifest icon is unsafe or missing: {icon_path}")
+    prompt = interface.get("defaultPrompt", f"Use ${name} for this request.")
+    if isinstance(prompt, list):
+        prompt = prompt[0] if prompt and isinstance(prompt[0], str) else f"Use ${name} for this request."
+    return {
+        "display_name": interface["displayName"],
+        "short_description": interface["shortDescription"],
+        "description": data["description"],
+        "icon": safe_relative(icon_path, source).as_posix(),
+        "color": interface.get("brandColor", "#2563EB"),
+        "default_prompt": prompt,
+        "version": data["version"],
+    }
+
+
+def bundle_entry(name: str, workflows: dict[str, str], metadata: dict[str, str]) -> str:
     trigger = {
         "atlas": "software delivery, code review, scoped implementation, debugging, or measured optimization",
         "spotter": "personal-life planning, portable personal knowledge, a daily brief, prioritization, KPI or time review, or cross-area preparation",
-    }[name]
+    }.get(name, metadata["description"])
     procedures = "\n".join(
         f"- `{workflow}` — {description} Read `references/package/skills/{workflow}/PROCEDURE.md`."
         for workflow, description in workflows.items()
     )
+    version_note = f"Source package: {name}; version: {metadata['version']}.\n\n" if metadata["version"] else ""
     return f"""---
 name: {name}
 description: Use when the user needs {trigger}. Routes the request to the matching maintained procedure.
 ---
 
-Read `references/package/core/{name.upper()}.md` first. It is the canonical doctrine
+{version_note}Read `references/package/core/{name.upper()}.md` first. It is the canonical doctrine
 for this bundle and user and host instructions still outrank it.
 
 Choose the one procedure that best matches the request, then read only the references
@@ -104,7 +162,7 @@ def rewrite_markdown(text: str, skill: str | None, source: Path) -> str:
             root = "references/package" if (source / "scripts" / filename).is_file() else f"references/package/skills/{skill}"
             return f"{root}/scripts/{filename}"
 
-        text = re.sub(r"(?<![\w/])scripts/([\w.-]+\.(?:py|sh))", rewrite_script, text)
+        text = re.sub(r"(?<![\w/])scripts/((?:[\w.-]+/)*[\w.-]+\.(?:py|sh))", rewrite_script, text)
     text = text.replace("/SKILL.md", "/PROCEDURE.md")
     text = re.sub(
         r"Skill tool `[^`:]+:([a-z-]+)` / `[^`:]+:([a-z-]+)`, `\$[a-z-]+` / `\$[a-z-]+` on Codex",
@@ -118,14 +176,16 @@ def rewrite_markdown(text: str, skill: str | None, source: Path) -> str:
     )
 
 
-def referenced_root_helpers(source: Path, name: str) -> set[str]:
-    helpers = set()
+def referenced_root_helpers(source: Path, name: str) -> set[Path]:
+    helpers: set[Path] = set()
     for document in list((source / "skills").rglob("*.md")) + [source / "core" / f"{name.upper()}.md"]:
         if not document.is_file() or safe_relative(document, source) is None:
             continue
-        for filename in re.findall(r"scripts/([\w.-]+\.(?:py|sh))", document.read_text(encoding="utf-8")):
-            if (source / "scripts" / filename).is_file():
-                helpers.add(filename)
+        for filename in re.findall(r"scripts/((?:[\w.-]+/)*[\w.-]+\.(?:py|sh))", document.read_text(encoding="utf-8")):
+            relative = Path(filename)
+            candidate = source / "scripts" / relative
+            if candidate.is_file() and safe_relative(candidate, source) is not None:
+                helpers.add(relative)
     return helpers
 
 
@@ -175,19 +235,20 @@ def export_package(name: str, source: Path, output: Path) -> Path:
         rewrite_markdown(core.read_text(), None, source), encoding="utf-8"
     )
 
+    metadata = plugin_metadata(name, source)
     workflows = skill_descriptions(source)
-    (bundle / "SKILL.md").write_text(bundle_entry(name, workflows), encoding="utf-8")
+    (bundle / "SKILL.md").write_text(bundle_entry(name, workflows, metadata), encoding="utf-8")
     (bundle / ".chatgpt-skill-export").write_text("generated; do not edit\n", encoding="utf-8")
     (bundle / "agents").mkdir(parents=True)
-    color = "#2563EB" if name == "atlas" else "#0F766E"
     (bundle / "agents" / "openai.yaml").write_text(
+        f"# Source: {name} {metadata['version']}\n"
         "interface:\n"
-        f"  display_name: \"{name.title()}\"\n"
-        f"  short_description: \"{('Code delivery and review workflows' if name == 'atlas' else 'Whole-life planning and review')}\"\n"
+        f"  display_name: {json.dumps(metadata['display_name'])}\n"
+        f"  short_description: {json.dumps(metadata['short_description'])}\n"
         "  icon_small: \"./assets/icon.png\"\n"
         "  icon_large: \"./assets/icon.png\"\n"
-        f"  brand_color: \"{color}\"\n"
-        f"  default_prompt: \"Use ${name} for this request.\"\n"
+        f"  brand_color: {json.dumps(metadata['color'])}\n"
+        f"  default_prompt: {json.dumps(metadata['default_prompt'])}\n"
         "policy:\n"
         "  allow_implicit_invocation: true\n",
         encoding="utf-8",
@@ -208,10 +269,14 @@ def export_package(name: str, source: Path, output: Path) -> Path:
             destination = destination.with_name("PROCEDURE.md")
         destination.parent.mkdir(parents=True, exist_ok=True)
         if is_document:
-            destination.write_text(
-                rewrite_markdown(source_file.read_text(encoding="utf-8"), relative.parts[1], source),
-                encoding="utf-8",
+            text = rewrite_markdown(source_file.read_text(encoding="utf-8"), relative.parts[1], source)
+            # Markdown links resolve from the document, unlike instruction root paths.
+            text = re.sub(
+                r"(?<=\]\()(references/package/[^)#]+)(#[^)]*)?(?=\))",
+                lambda match: Path(os.path.relpath(bundle / match[1], destination.parent)).as_posix() + (match[2] or ""),
+                text,
             )
+            destination.write_text(text, encoding="utf-8")
         else:
             shutil.copy2(source_file, destination)
 
@@ -223,13 +288,21 @@ def export_package(name: str, source: Path, output: Path) -> Path:
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source_file, destination)
 
-    if name == "spotter" and "wiki.sh" in root_helpers:
+    if name == "jobs-engine-seeker":
+        for source_file in sorted((source / "scripts" / "jaf").rglob("*.py")):
+            if source_file.is_symlink() or safe_relative(source_file, source) is None:
+                raise ValueError(f"unsafe Jobs runtime helper: {source_file}")
+            destination = package / source_file.relative_to(source)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source_file, destination)
+
+    if name == "spotter" and Path("wiki.sh") in root_helpers:
         for source_file in wiki_runtime_files(source):
             destination = package / source_file.relative_to(source)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source_file, destination)
 
-    icon = source / "assets" / "icon.png"
+    icon = source / metadata["icon"]
     if icon.is_file() and safe_relative(icon, source) is not None:
         destination = bundle / "assets" / "icon.png"
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -270,6 +343,11 @@ def check_bundle(bundle: Path, source: Path) -> list[str]:
         for target in set(re.findall(r"references/package/[\w./-]+\.(?:md|py|sh)", text)):
             if not (bundle / target).is_file():
                 errors.append(f"{bundle}: broken reference {target} in {document.relative_to(bundle)}")
+        for target in re.findall(r"\]\(([^)#]+\.md)(?:#[^)]+)?\)", text):
+            if "://" not in target:
+                resolved = (document.parent / target).resolve()
+                if not resolved.is_relative_to(bundle.resolve()) or not resolved.is_file():
+                    errors.append(f"{bundle}: broken relative reference {target} in {document.relative_to(bundle)}")
     for helper in referenced_root_helpers(source, bundle.name):
         if not (package / "scripts" / helper).is_file():
             errors.append(f"{bundle}: missing referenced root helper scripts/{helper}")
@@ -300,11 +378,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--atlas-root", required=True, type=Path)
     parser.add_argument("--spotter-root", required=True, type=Path)
+    parser.add_argument("--plugin", action="append", default=[], metavar="NAME=PATH", help="export an additional plugin from its canonical root")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--check", action="store_true", help="validate existing exports")
     args = parser.parse_args()
     output = args.output.resolve()
     source_roots = {"atlas": args.atlas_root.resolve(), "spotter": args.spotter_root.resolve()}
+    for value in args.plugin:
+        name, separator, path = value.partition("=")
+        if not separator or not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", name) or not path or name in source_roots:
+            parser.error("--plugin must be NAME=PATH with a new plugin name")
+        source_roots[name] = Path(path).resolve()
 
     if not args.check:
         output.mkdir(parents=True, exist_ok=True)
@@ -317,7 +401,7 @@ def main() -> int:
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
-    print("exports: atlas and spotter; one root SKILL.md each; source procedures and references closed")
+    print(f"exports: {', '.join(source_roots)}; one root SKILL.md each; source procedures and references closed")
     return 0
 
 
