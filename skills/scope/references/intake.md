@@ -1,6 +1,6 @@
 # Intake: work that arrived from outside
 
-Read when the argument is an issue number, a URL, a work item, a pasted bug report, a transcript, an image, a handoff or atlasme file rather than a task description.
+Read when the argument is an issue number, a URL, a work item, a pasted bug report, a transcript, an image or a file, including handoff, atlasme and howto maps, rather than a task description.
 
 1. Read the source. Run `sh <plugin root>/scripts/tracker.sh` (`<plugin root>` is the parent of the `skills/` directory this file lives in) for every item, pasted included: it names the forge, the CLI and whether it is authenticated, which step 4 and `--reply` depend on. A bare number or a URL is then fetched with the CLI the script named:
 
