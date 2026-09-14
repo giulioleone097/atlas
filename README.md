@@ -123,7 +123,7 @@ parallel hypotheses that keep only what beats the baseline.
 | `atlasme` | an idea or design needs clarification before implementation | Clarify an idea and resolve its open design decisions |
 | `build` | implementing a feature, fixing a bug, refactoring or migrating code | Implement, fix and verify the requested code change |
 | `handoff` | unfinished work must continue in another session | Save unfinished work for a reliable next session |
-| `howto` | an initiative has dependent decisions that span several sessions | Map dependent decisions across multiple sessions |
+| `howto` | an objective needs a path through dependent decisions | Evidence, decisions and checkpoints leading to authorized work |
 | `improve` | assessing codebase structure or choosing a broader improvement | Assess codebase structure and choose an improvement |
 | `intel` | a research question needs evidence from official documentation, specifications, source code or first-party APIs | Research a question and produce a cited evidence brief |
 | `optimize` | improving a measurable performance, resource or quality metric | Improve a measured metric while preserving guard limits |
@@ -136,6 +136,10 @@ parallel hypotheses that keep only what beats the baseline.
 | `simplify` | simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit | Simplify scoped code while preserving its behavior |
 
 After `atlasme` settles an authorized implementation request, Atlas executes `scope` → `build` → `review` in the same turn. When ticket creation was requested (`--tickets` or ordinary language), that intent travels through the card into build's planning procedure; it publishes missing tasks or reports local drafts when tracker access is unavailable, then implementation continues. Merely printing the next skill is not a completed handoff. Card-only and assessment-only requests retain their stop boundary.
+
+Use `howto <objective>` when the missing piece is the route: outcome and proof, dependent decisions, alternatives and checkpoints. It resolves what is ready without a one-decision-per-session limit. `howto <map>` resumes the same map, rechecking only consequential changes. `--decision-only` keeps the result at the map; `--card-only --tickets` retains ticket intent on a card for later work; implementation plus `--tickets` continues through scope and build. Explicit read-only mode returns an unsaved map. Decisions and checkpoints link existing issues; the map is not another backlog. Use `atlasme` for clarifying one idea and `scope` when the work is already defined.
+
+When a decision requires an experiment, `howto` can execute the smallest ready evidence checkpoint within existing preparation authority, incorporate its verified result and continue the map. A checkpoint does not complete the parent goal. Map-only/read-only requests retain that checkpoint as a proposed next step.
 
 Every stage keeps its branches in `references/`: the root file is a router, read in full, and a branch is read only when its case applies.
 
