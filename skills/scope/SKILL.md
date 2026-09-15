@@ -1,14 +1,14 @@
 ---
 name: scope
 description: Use when incoming work needs source verification, a bounded outcome or acceptance criteria. Read the issue, document or handoff, resolve material unknowns, and prepare the task for implementation.
-argument-hint: "[task | issue number | url | file | pasted text] [--card-only] [--reply] [--tickets]"
+argument-hint: "[task | issue number | url | file | pasted text] [--card-only] [--reply] [--simulate] [--tickets]"
 ---
 
 1. Take the argument as the work; empty, the request already stated in this conversation is the work. Neither: look for the most recent handoff or atlasme file (`docs/handoff-*.md` and `docs/atlasme-*.md`); found, offer through the host's question tool to resume it, start something else, or stop, and continue with the answer; none, emit `blocked: task missing` and stop.
 
 2. Route by what arrived. An issue number, a URL, a work item, a pasted report, a transcript, an image or a file (including handoff, atlasme and howto maps): read `<this skill>/references/intake.md` (`<this skill>` is the directory this file lives in) and come back here with what it established. If intake resumed an unsettled howto map, return that workflow's result to the original caller; do not scope the same map again. A task whose outcome is genuinely undecided, with open design branches rather than missing facts: read `references/atlasme.md`, settle the tree with the user, and come back with the settled decisions. A task whose outcome, boundary and acceptance you could already write: continue.
 
-3. Read `references/context.md` when durable context can change the outcome, reusing a current receipt. The decision engine owns brainstorming and composes `references/scenarios.md` for scenario comparison and decision review; reuse its findings. If it returns `checkpoint-needed`, hand the same subject and evidence to public `<plugin root>/skills/howto/SKILL.md` with current authority, `--card-only` and `--tickets` when requested, then return that result. Do not scope an unsettled whole outcome or use review as implementation permission. Otherwise find the remaining facts in the identified code, relevant `docs/atlas/map.md` and settled `CONTEXT.md`; never ask for facts available there.
+3. Read `references/context.md` when durable context can change the outcome, reusing a current receipt. The decision engine owns brainstorming and composes `references/scenarios.md` for scenario comparison, bounded native simulation when requested/material, and decision review; reuse its findings. If it returns `checkpoint-needed`, hand the same subject and evidence to public `<plugin root>/skills/howto/SKILL.md` with current authority, `--simulate` when requested, `--card-only` and `--tickets` when requested, then return that result. Do not scope an unsettled whole outcome or use review as implementation permission. Otherwise find the remaining facts in the identified code, relevant `docs/atlas/map.md` and settled `CONTEXT.md`; never ask for facts available there.
 
 4. Draft the card from what you found. Resolve ambiguity per core, and put the chosen reading in the card as `Assuming <reading>.` inside Outcome.
 
