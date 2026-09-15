@@ -22,7 +22,9 @@ python3 integrations/chatgpt/export_native_skills.py \
 The output folder contains `atlas.zip`, `spotter.zip`, and one ZIP for each optional
 plugin. Each archive has one native
 `SKILL.md`, its canonical core, the maintained procedures and their referenced
-documents. The Jobs Engine Seeker archive derives its UI metadata from its Codex
+documents. UI metadata and the source version come from the plugin manifest; skill
+descriptions come from the maintained entries, so exports do not carry a second
+Atlas/Spotter catalog. The Jobs Engine Seeker archive derives its UI metadata from its Codex
 manifest and carries only the public fixture-engineering runtime closure; it excludes
 operational workspaces, ledgers, reports, CVs, environment files, and credentials. The
 Spotter archive also carries the minimal standard-library Wiki runtime

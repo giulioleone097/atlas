@@ -52,29 +52,6 @@ def has_export_marker_in_archive(archive: Path) -> bool:
 
 
 def plugin_metadata(name: str, source: Path) -> dict[str, str]:
-    defaults = {
-        "atlas": {
-            "display_name": "Atlas",
-            "short_description": "Code delivery and review workflows",
-            "description": "software delivery, code review, scoped implementation, debugging, or measured optimization",
-            "icon": "assets/icon.png",
-            "color": "#2563EB",
-            "default_prompt": "Use $atlas for this request.",
-            "version": "",
-        },
-        "spotter": {
-            "display_name": "Spotter",
-            "short_description": "Whole-life planning and review",
-            "description": "personal-life planning, portable personal knowledge, a daily brief, prioritization, KPI or time review, or cross-area preparation",
-            "icon": "assets/icon.png",
-            "color": "#0F766E",
-            "default_prompt": "Use $spotter for this request.",
-            "version": "",
-        },
-    }
-    if name in defaults:
-        return defaults[name]
-
     manifest = source / ".codex-plugin" / "plugin.json"
     if not manifest.is_file() or safe_relative(manifest, source) is None:
         raise ValueError(f"plugin manifest is missing: {manifest}")
@@ -108,8 +85,8 @@ def plugin_metadata(name: str, source: Path) -> dict[str, str]:
 
 def bundle_entry(name: str, workflows: dict[str, str], metadata: dict[str, str]) -> str:
     trigger = {
-        "atlas": "software delivery, code review, scoped implementation, debugging, or measured optimization",
-        "spotter": "personal-life planning, portable personal knowledge, a daily brief, prioritization, KPI or time review, or cross-area preparation",
+        "atlas": "software brainstorming through verified implementation, code review, debugging, or measured optimization",
+        "spotter": "personal brainstorming through practical preparation, portable knowledge, daily planning, priorities, KPI or time review",
     }.get(name, metadata["description"])
     procedures = "\n".join(
         f"- `{workflow}` — {description} Read `references/package/skills/{workflow}/PROCEDURE.md`."

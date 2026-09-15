@@ -1,7 +1,7 @@
 interface:
   display_name: "Atlas Me"
-  short_description: "Clarify an idea and resolve its open design decisions"
-  default_prompt: "Use $atlasme to clarify this idea. Read available evidence first, ask only unresolved decisions, explain the consequences of each option, and respect any implementation already authorized."
+  short_description: "Brainstorm approaches, scenarios and a reviewed choice"
+  default_prompt: "Use $atlasme to explore this idea from sourced facts, compare feasible approaches under shared scenarios, review the decision, resolve missing user values, and carry already-authorized work into howto without repeating the analysis."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

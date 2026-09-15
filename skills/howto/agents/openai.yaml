@@ -1,7 +1,7 @@
 interface:
   display_name: "Howto"
-  short_description: "Chart the path from an objective to verified work"
-  default_prompt: "Use $howto to establish this objective and its proof, map dependencies, resolve ready decisions, retain evidence and checkpoints, and continue authorized work or preserve the exact next step for resumption."
+  short_description: "Brainstorm, review scenarios, act and verify the outcome"
+  default_prompt: "Use $howto to explore approaches and possible scenarios, challenge the choice with decision review, execute the smallest authorized step, verify its outcome and adapt the same map from evidence. Preserve read-only and decision-only limits."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

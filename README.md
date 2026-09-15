@@ -91,8 +91,8 @@ hook event rules).
 ## The flow
 
 ```
-atlasme ─┐
-setup? ──► scope ──► build ──► review ──► ship
+atlasme ──► howto ─┐
+setup? ────────────► scope ──► build ──► review ──► ship
              │          │          │
        intake, atlasme  plan, debug  shrink, reviewers,
        goal card      prove        integrator
@@ -111,7 +111,7 @@ map; the map is refreshed by the model when its stamp is behind facts needed for
 the task. Type a
 stage name only to run one alone or with flags.
 `atlasme`, `simplify`, `handoff` and `optimize` are entry points you type by name:
-an idea interrogated before any card exists, a shrink pass on code nobody asked
+an idea explored through scenarios and a reviewed choice, a shrink pass on code nobody asked
 to review, a session written down for the next one (which resumes it through
 `scope <file>`), and a measured number pushed toward a target by rounds of
 parallel hypotheses that keep only what beats the baseline.
@@ -120,10 +120,10 @@ parallel hypotheses that keep only what beats the baseline.
 
 | Skill | Use when | Result |
 |---|---|---|
-| `atlasme` | an idea or design needs clarification before implementation | Clarify an idea and resolve its open design decisions |
+| `atlasme` | an idea needs brainstorming before choosing an approach | Compare approaches and scenarios, review the choice, carry authorized work into howto |
 | `build` | implementing a feature, fixing a bug, refactoring or migrating code | Implement, fix and verify the requested code change |
 | `handoff` | unfinished work must continue in another session | Save unfinished work for a reliable next session |
-| `howto` | an objective needs a path through dependent decisions | Evidence, decisions and checkpoints leading to authorized work |
+| `howto` | brainstorming must become a practical, verifiable outcome | Compare scenarios, review choices, execute authorized steps and adapt from evidence |
 | `improve` | assessing codebase structure or choosing a broader improvement | Assess codebase structure and choose an improvement |
 | `intel` | a research question needs evidence from official documentation, specifications, source code or first-party APIs | Research a question and produce a cited evidence brief |
 | `optimize` | improving a measurable performance, resource or quality metric | Improve a measured metric while preserving guard limits |
@@ -135,9 +135,11 @@ parallel hypotheses that keep only what beats the baseline.
 | `ship` | committing verified work, pushing changes, opening a PR or preparing its description | Deliver verified changes or prepare a PR description |
 | `simplify` | simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit | Simplify scoped code while preserving its behavior |
 
-After `atlasme` settles an authorized implementation request, Atlas executes `scope` → `build` → `review` in the same turn. When ticket creation was requested (`--tickets` or ordinary language), that intent travels through the card into build's planning procedure; it publishes missing tasks or reports local drafts when tracker access is unavailable, then implementation continues. Merely printing the next skill is not a completed handoff. Card-only and assessment-only requests retain their stop boundary.
+After `atlasme` settles an authorized implementation request, Atlas executes `howto` → `scope` → `build` → `review` in the same turn, reusing the reviewed decisions. When ticket creation was requested (`--tickets` or ordinary language), that intent travels through the card into build's planning procedure; it publishes missing tasks or reports local drafts when tracker access is unavailable, then implementation continues. Merely printing the next skill is not a completed handoff. Card-only and assessment-only requests retain their stop boundary.
 
-Use `howto <objective>` when the missing piece is the route: outcome and proof, dependent decisions, alternatives and checkpoints. It resolves what is ready without a one-decision-per-session limit. `howto <map>` resumes the same map, rechecking only consequential changes. `--decision-only` keeps the result at the map; `--card-only --tickets` retains ticket intent on a card for later work; implementation plus `--tickets` continues through scope and build. Explicit read-only mode returns an unsaved map. Decisions and checkpoints link existing issues; the map is not another backlog. Use `atlasme` for clarifying one idea and `scope` when the work is already defined.
+Use `howto <objective>` for brainstorming through practice: define outcome and proof, compare materially different approaches under the same plausible conditions, review the choice, execute authorized steps, then compare real results with forecasts. A read-only reviewer challenges consequential choices; two or three independent lenses are useful only when different perspectives can change the choice. The lead reconciles evidence and dissent, without voting. Scenarios are hypotheses; actual checks establish results. It resolves what is ready without a one-decision-per-session limit. `howto <map>` resumes the same map, rechecking only consequential changes. `--decision-only` keeps the result at the map; `--card-only --tickets` retains ticket intent on a card for later work; implementation plus `--tickets` continues through scope and build. Explicit read-only mode returns an unsaved map. Decisions and checkpoints link existing issues; the map is not another backlog. Use `atlasme` to explore one idea and `scope` when the work is already defined.
+
+The shared decision engine belongs to scope (`atlasme.md` and `scenarios.md`); howto calls it directly, so public skills cannot bounce back and repeat the same brainstorming. No new skill, council log or duplicate issue backlog is required.
 
 When a decision requires an experiment, `howto` can execute the smallest ready evidence checkpoint within existing preparation authority, incorporate its verified result and continue the map. A checkpoint does not complete the parent goal. Map-only/read-only requests retain that checkpoint as a proposed next step.
 
@@ -145,17 +147,19 @@ Every stage keeps its branches in `references/`: the root file is a router, read
 
 ## Agents
 
-- `atlas-scout` — sonnet, or `gpt-5.6-luna` on Codex, never edits files.
+Role definitions live in `agents/`; `agents/models.json` owns model mappings for each host.
+
+- `atlas-scout` — read-only.
   Locates code; returns `path:line` references or `No match.`. Never suggests
   fixes.
-- `atlas-worker` — sonnet by default (opus for complex slices), or
-  `gpt-5.6-luna` / `gpt-5.6-terra` on Codex. Implements one owned, disjoint
+- `atlas-worker` — implements one owned, disjoint
   slice under an explicit contract; reports changed files, proof, blockers,
   follow-ups.
-- `atlas-reviewer` — opus, or `gpt-5.6-terra` on Codex, never edits files.
-  Reviews one lens (`correctness`, `slop`, `safety`, or `all`) against a baseline diff;
+- `atlas-reviewer` — read-only.
+  In `mode: decision`, challenges a brief and scenarios before implementation.
+  Otherwise reviews one lens (`correctness`, `slop`, `safety`, or `all`) against a baseline diff;
   reports every finding with a confidence score, never fixes anything itself.
-- `atlas-integrator` — opus, or `gpt-5.6-terra` on Codex, never edits files.
+- `atlas-integrator` — read-only.
   Merges reports when several areas need integration, settles contradictions by
   reading the code, catches cross-area defects, and runs the nearest checks with
   every failure attributed to the baseline before it is called new. There is no

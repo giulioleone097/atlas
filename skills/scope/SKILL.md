@@ -8,13 +8,13 @@ argument-hint: "[task | issue number | url | file | pasted text] [--card-only] [
 
 2. Route by what arrived. An issue number, a URL, a work item, a pasted report, a transcript, an image or a file (including handoff, atlasme and howto maps): read `<this skill>/references/intake.md` (`<this skill>` is the directory this file lives in) and come back here with what it established. If intake resumed an unsettled howto map, return that workflow's result to the original caller; do not scope the same map again. A task whose outcome is genuinely undecided, with open design branches rather than missing facts: read `references/atlasme.md`, settle the tree with the user, and come back with the settled decisions. A task whose outcome, boundary and acceptance you could already write: continue.
 
-3. Find the facts yourself: start at the files or symbols already identified. Use the relevant part of `docs/atlas/map.md` when discovery is needed; otherwise one bounded search for the flow. A `CONTEXT.md` at the repo root, when present, is settled vocabulary: consult it before asking. Never ask the user for something the repository can answer.
+3. The decision engine owns brainstorming and composes `references/scenarios.md` for scenario comparison and decision review; reuse its findings. If it returns `checkpoint-needed`, hand the same subject and evidence to public `<plugin root>/skills/howto/SKILL.md` with current authority, `--card-only` and `--tickets` when requested, then return that result. Do not scope an unsettled whole outcome or use review as implementation permission. Otherwise find the remaining facts in the identified code, relevant `docs/atlas/map.md` and settled `CONTEXT.md`; never ask for facts available there.
 
 4. Draft the card from what you found. Resolve ambiguity per core, and put the chosen reading in the card as `Assuming <reading>.` inside Outcome.
 
 5. Test every remaining unknown against one bar: would a different answer change which files change, what acceptance means, or whether the work is safe? Decide everything below that bar yourself and say nothing about it.
 
-6. More than three survive, or a survivor is a design decision rather than a missing fact: `references/atlasme.md`. Otherwise ask the survivors through the host's question tool, contract in `references/asking.md`.
+6. More than three survive, or a survivor is a design decision: run `references/atlasme.md`, handling a returned evidence checkpoint through step 3. Otherwise ask the surviving missing user decisions through `references/asking.md`.
 
 7. Write Acceptance as a single check that fails when the outcome is absent. "Works correctly" is not a check; "GET /orders/9 returns 404 instead of 500" is.
 

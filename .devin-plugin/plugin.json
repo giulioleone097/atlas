@@ -1,7 +1,7 @@
 {
   "name": "atlas",
-  "version": "2.0.10",
-  "description": "Lock the outcome, take the shortest safe path, prove only changed behavior, stop. Development, optimization and review flow for Claude Code, Codex, Devin and Cursor.",
+  "version": "2.1.0",
+  "description": "Brainstorm approaches, review scenarios, implement the smallest useful change and verify the outcome. Development, optimization and review across supported agent hosts.",
   "author": {
     "name": "Giulio Leone",
     "url": "https://github.com/giulioleone097"
