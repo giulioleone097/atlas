@@ -6,7 +6,7 @@ argument-hint: "[the design question, state machine or UI to prototype]"
 
 1. Take the argument as the question. Empty: ask what to prototype in one line and stop there. Pick the branch from the question's shape: a question about a state machine, a flow, or "does this logic feel right" is the logic branch; a question about layout, interaction feel, or "which of these works" is the UI branch. Genuinely ambiguous and the user reachable: ask through the host's question tool; otherwise infer from the surrounding code (a backend module → logic, a page or component → UI) and state the assumption.
 
-2. Pick a scratch location outside the versioned tree: `.prototype-<slug>/` at the repo root, added to `.gitignore` if not already ignored, or the system temp directory when the repo forbids stray top-level dirs. Never place prototype files under `<plugin root>` or any other tracked path, and never stage or commit them.
+2. Pick a system temporary directory (`mktemp -d`) outside the versioned tree. Never place prototype files under `<plugin root>` or any other tracked path, edit a tracked ignore file for them, stage them or commit them.
 
 3. Logic branch: build one self-contained HTML file in the scratch dir — inline JS and CSS, no build step, no dependency — that pushes the state machine through the cases hard to reason about on paper. Give it free-play controls plus buttons that walk guided cases, and render the full current state after every action so a non-developer can drive it and see what changed.
 

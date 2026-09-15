@@ -18,6 +18,7 @@ while [ "$dir" != "/" ]; do
   if [ -f "$dir/project.json" ] || [ -f "$dir/package.json" ] || [ -f "$dir/pyproject.toml" ] || \
      [ -f "$dir/pytest.ini" ] || [ -f "$dir/setup.cfg" ] || [ -f "$dir/tox.ini" ] || [ -f "$dir/conftest.py" ] || \
      [ -f "$dir/Cargo.toml" ] || [ -f "$dir/go.mod" ] || [ -f "$dir/Makefile" ] || \
+     ls "$dir"/test_*.py >/dev/null 2>&1 || \
      ls "$dir"/*.csproj >/dev/null 2>&1 || ls "$dir"/*.sln >/dev/null 2>&1; then
     break
   fi
@@ -70,6 +71,12 @@ if [ "$found" -eq 0 ] && { [ -f "$dir/pyproject.toml" ] || [ -f "$dir/pytest.ini
      { [ -f "$dir/setup.cfg" ] && grep -q '^\[tool:pytest\]' "$dir/setup.cfg"; } || { [ -f "$dir/tox.ini" ] && grep -q '^\[pytest\]' "$dir/tox.ini"; }; then
     emit test "$runner pytest -q"
   fi
+fi
+
+# stdlib suites often live beside their source and intentionally need no pytest configuration.
+if ls "$dir"/test_*.py >/dev/null 2>&1; then
+  runner="python -m"; [ -f "$dir/uv.lock" ] && runner="uv run python -m"
+  emit test "$runner unittest discover -p 'test_*.py'"
 fi
 
 # .NET

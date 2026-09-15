@@ -25,8 +25,12 @@ CODE = ["*.py", "*.pyi", "*.ts", "*.tsx", "*.js", "*.mjs", "*.cjs", "*.cs", "*.g
         "*.yaml", "*.yml", "*.json", "*.toml", "*.html", "*.sql", "*.sh", "*.md"]
 
 
-def git(repo, *args):
-    return subprocess.run(["git", "-C", repo, *args], capture_output=True, text=True).stdout
+def git(repo, *args, allowed=(0,)):
+    result = subprocess.run(["git", "-C", repo, *args], capture_output=True, text=True)
+    if result.returncode not in allowed:
+        detail = result.stderr.strip() or result.stdout.strip() or f"exit {result.returncode}"
+        raise SystemExit(f"git {' '.join(args)} failed: {detail}")
+    return result.stdout
 
 
 def symbols(line):
@@ -44,7 +48,7 @@ def consumers(repo, head, names, changed, chunk=150):
     keys = [(n, re.compile("^" + (n if "[./]" in n else re.escape(n)) + "$")) for n in names]
     for i in range(0, len(names), chunk):
         alt = "|".join(n if "[./]" in n else re.escape(n) for n in names[i:i + chunk])
-        out = git(repo, "grep", "-I", "-o", "-w", "-E", alt, head, "--", *CODE, ":!*.lock", ":!*.min.js", ":!*.min.css", ":!*.map")
+        out = git(repo, "grep", "-I", "-o", "-w", "-E", alt, head, "--", *CODE, ":!*.lock", ":!*.min.js", ":!*.min.css", ":!*.map", allowed=(0, 1))
         for line in out.splitlines():
             try:
                 _, path, match = line.split(":", 2)
@@ -69,6 +73,9 @@ def main():
     ap.add_argument("base")
     ap.add_argument("head")
     a = ap.parse_args()
+
+    git(a.repo, "rev-parse", "--verify", "--quiet", f"{a.base}^{{commit}}")
+    git(a.repo, "rev-parse", "--verify", "--quiet", f"{a.head}^{{commit}}")
 
     changed = set(git(a.repo, "diff", "--name-only", a.base, a.head).splitlines())
     removed, added, current = {}, set(), None

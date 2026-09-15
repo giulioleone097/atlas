@@ -101,7 +101,7 @@ sys.exit(1 if bad else 0)
 PYEOF
 
 python3 - "$ROOT" <<'EOF' || fail=1
-import json, re, sys
+import ast, json, re, subprocess, sys
 root = sys.argv[1]
 for f in (".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
           ".codex-plugin/plugin.json", ".agents/plugins/marketplace.json",
@@ -119,6 +119,9 @@ for f in glob.glob(f"{root}/agents/*.md"):
     m = re.search(r"^model: (\w+)$", open(f).read(), re.M)
     if m and m.group(1) not in reg["tiers"]:
         sys.exit(f"models.json: {f} declares unknown tier {m.group(1)}")
+for f in subprocess.check_output(["git", "-C", root, "ls-files", "*.py"], text=True).splitlines():
+    with open(f"{root}/{f}", encoding="utf-8") as source:
+        ast.parse(source.read(), filename=f)
 core = open(f"{root}/core/ATLAS.md").read().strip()
 for f in ("AGENTS.md", "rules/atlas-core.mdc"):
     m = re.search(r"<!-- atlas:core:start -->\n(.*?)\n<!-- atlas:core:end -->", open(f"{root}/{f}").read(), re.S)

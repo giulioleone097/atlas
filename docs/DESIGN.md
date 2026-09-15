@@ -4,7 +4,7 @@ One plugin for the whole development loop, on Claude Code, Codex, Devin and Curs
 
 ## Non-goals
 
-- No PRD/architecture/tech-doc quintuplets, no 50 KB skills, no telemetry, no MCP server, no modes or intensity levels: one doctrine.
+- No PRD/architecture/tech-doc quintuplets, no 50 KB skills, no telemetry, no required MCP server, no modes or intensity levels: one doctrine.
 - No per-language rule packs. Repository instructions (AGENTS.md / CLAUDE.md) own language conventions.
 - No memory outside the repository. What a session learns goes into `docs/atlas/` and AGENTS.md, where the next session and the next person read it.
 - No dependency on any other plugin, server or registry. Every detector reads git, the filesystem and the CLIs the repository already uses.

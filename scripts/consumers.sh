@@ -33,18 +33,20 @@ remote=$(git -C "$repo" remote get-url origin 2>/dev/null | sed -E -e 's#\.git$#
 [ -n "$remote" ] && add "$remote"
 [ -z "$names" ] && { echo "none=1"; exit 0; }
 
-found=0
 # dependency manifests in sibling repositories, two levels under the search root
 # ceiling: depth 4 from the search root, upgrade to an explicit root argument when checkouts nest deeper
-for m in $(find "$root" -mindepth 1 -maxdepth 4 -type f \( -name package.json -o -name pyproject.toml -o -name requirements.txt -o -name Cargo.toml -o -name go.mod -o -name '*.csproj' -o -name 'pnpm-workspace.yaml' -o -name '*.sln' \) \
-           -not -path "$repo/*" -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/target/*' 2>/dev/null); do
-  for n in $names; do
-    if grep -qF -- "$n" "$m" 2>/dev/null; then
-      d=$(dirname "$m")
-      case "$m" in *pnpm-workspace.yaml|*.sln) echo "consumer=$d (workspace)";; *) echo "consumer=$d ($(basename "$m") -> $n)";; esac
-      found=1; break
-    fi
-  done
-done
-[ "$found" -eq 0 ] && echo "none=1"
+export names
+matches=$(find "$root" -mindepth 1 -maxdepth 4 -type f \( -name package.json -o -name pyproject.toml -o -name requirements.txt -o -name Cargo.toml -o -name go.mod -o -name '*.csproj' -o -name 'pnpm-workspace.yaml' -o -name '*.sln' \) \
+  -not -path "$repo/*" -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/target/*' -exec sh -c '
+    for m do
+      for n in $names; do
+        if grep -qF -- "$n" "$m" 2>/dev/null; then
+          d=$(dirname "$m")
+          case "$m" in *pnpm-workspace.yaml|*.sln) echo "consumer=$d (workspace)";; *) echo "consumer=$d ($(basename "$m") -> $n)";; esac
+          break
+        fi
+      done
+    done
+  ' sh {} + 2>/dev/null)
+[ -n "$matches" ] && printf '%s\n' "$matches" || echo "none=1"
 exit 0
