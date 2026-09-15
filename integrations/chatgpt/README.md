@@ -15,7 +15,7 @@ python3 integrations/chatgpt/export_native_skills.py \
 python3 integrations/chatgpt/export_native_skills.py \
   --atlas-root /path/to/atlas \
   --spotter-root /path/to/spotter \
-  --plugin jobs-engine-seeker=/Users/giulioleone/plugins/jobs-engine-seeker \
+  --plugin jobs-engine-seeker=/path/to/jobs-engine-seeker \
   --output /path/to/chatgpt-skills
 ```
 
@@ -46,7 +46,7 @@ Rebuild after changes to either source repository, then validate the exported sh
 ```sh
 python3 integrations/chatgpt/export_native_skills.py \
   --atlas-root /path/to/atlas --spotter-root /path/to/spotter \
-  --plugin jobs-engine-seeker=/Users/giulioleone/plugins/jobs-engine-seeker \
+  --plugin jobs-engine-seeker=/path/to/jobs-engine-seeker \
   --output /path/to/chatgpt-skills --check
 python3 <skill-creator>/scripts/quick_validate.py /path/to/chatgpt-skills/atlas
 python3 <skill-creator>/scripts/quick_validate.py /path/to/chatgpt-skills/spotter

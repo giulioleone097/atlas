@@ -9,8 +9,46 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, BadZipFile, ZipFile
+
+
+EXPORT_MARKER = b"generated; do not edit\n"
+
+
+def has_export_marker(path: Path) -> bool:
+    """Return whether a regular marker belongs to this exporter."""
+
+    try:
+        return path.is_file() and not path.is_symlink() and path.read_bytes() == EXPORT_MARKER
+    except OSError:
+        return False
+
+
+def bundle_files(bundle: Path) -> dict[str, bytes]:
+    files: dict[str, bytes] = {}
+    for path in sorted(bundle.rglob("*")):
+        if path.is_symlink():
+            raise ValueError(f"export contains a symlink: {path}")
+        if path.is_file():
+            files[path.relative_to(bundle).as_posix()] = path.read_bytes()
+    return files
+
+
+def archive_files(archive: Path) -> dict[str, bytes]:
+    with ZipFile(archive) as zip_file:
+        names = [entry.filename for entry in zip_file.infolist() if not entry.is_dir()]
+        if len(names) != len(set(names)):
+            raise ValueError(f"archive contains duplicate paths: {archive}")
+        return {name: zip_file.read(name) for name in names}
+
+
+def has_export_marker_in_archive(archive: Path) -> bool:
+    try:
+        return archive_files(archive).get(".chatgpt-skill-export") == EXPORT_MARKER
+    except (BadZipFile, OSError, ValueError):
+        return False
 
 
 def plugin_metadata(name: str, source: Path) -> dict[str, str]:
@@ -78,9 +116,10 @@ def bundle_entry(name: str, workflows: dict[str, str], metadata: dict[str, str])
         for workflow, description in workflows.items()
     )
     version_note = f"Source package: {name}; version: {metadata['version']}.\n\n" if metadata["version"] else ""
+    description = f"Use when the user needs {trigger}. Routes the request to the matching maintained procedure."
     return f"""---
-name: {name}
-description: Use when the user needs {trigger}. Routes the request to the matching maintained procedure.
+name: {json.dumps(name)}
+description: {json.dumps(description)}
 ---
 
 {version_note}Read `references/package/core/{name.upper()}.md` first. It is the canonical doctrine
@@ -214,7 +253,7 @@ def export_package(name: str, source: Path, output: Path) -> Path:
 
     bundle = output / name
     marker = bundle / ".chatgpt-skill-export"
-    if bundle.is_symlink() or (bundle.exists() and (marker.is_symlink() or not marker.is_file())):
+    if bundle.is_symlink() or (bundle.exists() and not has_export_marker(marker)):
         raise ValueError(f"refusing to replace unowned output directory: {bundle}")
     archive = output / f"{name}.zip"
     if archive.is_symlink():
@@ -222,7 +261,7 @@ def export_package(name: str, source: Path, output: Path) -> Path:
     if archive.exists():
         try:
             with ZipFile(archive) as previous:
-                owned = previous.read(".chatgpt-skill-export") == b"generated; do not edit\n"
+                owned = previous.read(".chatgpt-skill-export") == EXPORT_MARKER
         except (BadZipFile, KeyError):
             owned = False
         if not owned:
@@ -238,7 +277,7 @@ def export_package(name: str, source: Path, output: Path) -> Path:
     metadata = plugin_metadata(name, source)
     workflows = skill_descriptions(source)
     (bundle / "SKILL.md").write_text(bundle_entry(name, workflows, metadata), encoding="utf-8")
-    (bundle / ".chatgpt-skill-export").write_text("generated; do not edit\n", encoding="utf-8")
+    (bundle / ".chatgpt-skill-export").write_bytes(EXPORT_MARKER)
     (bundle / "agents").mkdir(parents=True)
     (bundle / "agents" / "openai.yaml").write_text(
         f"# Source: {name} {metadata['version']}\n"
@@ -317,12 +356,15 @@ def export_package(name: str, source: Path, output: Path) -> Path:
 
 def check_bundle(bundle: Path, source: Path) -> list[str]:
     errors: list[str] = []
+    archive = bundle.parent / f"{bundle.name}.zip"
+    if bundle.is_symlink():
+        return [f"{bundle}: exported directory must not be a symlink"]
     skills = list(bundle.rglob("SKILL.md"))
     if skills != [bundle / "SKILL.md"]:
         errors.append(f"{bundle}: expected exactly one root SKILL.md, found {len(skills)}")
     package = bundle / "references" / "package"
-    if not (bundle / ".chatgpt-skill-export").is_file():
-        errors.append(f"{bundle}: missing generated-output marker")
+    if not has_export_marker(bundle / ".chatgpt-skill-export"):
+        errors.append(f"{bundle}: missing or invalid generated-output marker")
     if not (bundle / "agents" / "openai.yaml").is_file():
         errors.append(f"{bundle}: missing native UI sidecar")
     if not (bundle / "assets" / "icon.png").is_file():
@@ -343,7 +385,7 @@ def check_bundle(bundle: Path, source: Path) -> list[str]:
         for target in set(re.findall(r"references/package/[\w./-]+\.(?:md|py|sh)", text)):
             if not (bundle / target).is_file():
                 errors.append(f"{bundle}: broken reference {target} in {document.relative_to(bundle)}")
-        for target in re.findall(r"\]\(([^)#]+\.md)(?:#[^)]+)?\)", text):
+        for target in re.findall(r"\]\(([^)#]+\.(?:md|py|sh))(?:#[^)]+)?\)", text):
             if "://" not in target:
                 resolved = (document.parent / target).resolve()
                 if not resolved.is_relative_to(bundle.resolve()) or not resolved.is_file():
@@ -371,6 +413,23 @@ def check_bundle(bundle: Path, source: Path) -> list[str]:
                     errors.append(f"{bundle}: missing wiki helper dependency {exported.relative_to(bundle)}")
             for unexpected in sorted(actual_runtime - expected_runtime):
                 errors.append(f"{bundle}: unexpected wiki runtime artifact {unexpected}")
+    if archive.is_symlink() or not archive.is_file():
+        errors.append(f"{bundle}: missing generated archive {archive.name}")
+    elif not has_export_marker_in_archive(archive):
+        errors.append(f"{bundle}: archive is not owned by this exporter")
+    else:
+        try:
+            if archive_files(archive) != bundle_files(bundle):
+                errors.append(f"{bundle}: archive content differs from exported directory")
+        except (BadZipFile, OSError, ValueError) as error:
+            errors.append(f"{bundle}: cannot validate archive: {error}")
+    try:
+        with tempfile.TemporaryDirectory() as directory:
+            expected = export_package(bundle.name, source, Path(directory))
+            if bundle_files(bundle) != bundle_files(expected):
+                errors.append(f"{bundle}: exported content differs from current source")
+    except (OSError, ValueError) as error:
+        errors.append(f"{bundle}: cannot validate current source: {error}")
     return errors
 
 

@@ -29,7 +29,12 @@ WIKI_WRITE = ToolAnnotations(
 def _load_runtime(package_root: Path) -> tuple[type[Any], type[ValueError]]:
     """Load only the runtime packaged with this configured Spotter plugin."""
 
+    package_root = package_root.resolve()
     runtime = package_root / "runtime" / "spotter_wiki"
+    components = [package_root / "runtime", runtime, *runtime.rglob("*.py")]
+    if any(path.is_symlink() or not path.resolve().is_relative_to(package_root)
+           for path in components):
+        raise ValueError("private-wiki runtime must stay inside its Spotter package")
     init_file = runtime / "__init__.py"
     store_file = runtime / "store.py"
     if not init_file.is_file() or not store_file.is_file():
