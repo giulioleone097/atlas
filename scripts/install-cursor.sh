@@ -19,15 +19,16 @@ if [ "$1" = "--remove" ]; then
   done
   rm -f "$CURSOR_DIR"/agents/atlas-*.md "$CURSOR_DIR"/agents/sniper-*.md
   ROOT="$ROOT" CURSOR_DIR="$CURSOR_DIR" python3 - <<'PYEOF'
-import json, os
+import json, os, sys
+sys.path.insert(0, os.path.join(os.environ["ROOT"], "scripts"))
+from hook_owner import is_atlas_hook
 cfg_path = os.path.join(os.environ["CURSOR_DIR"], "hooks.json")
 if os.path.exists(cfg_path):
     cfg = json.load(open(cfg_path))
     hooks = cfg.get("hooks") or {}
     for ev, entries in list(hooks.items()):
         hooks[ev] = [h for h in entries
-            if "scripts/core-context.sh" not in h.get("command", "")
-            and "scripts/guard.sh" not in h.get("command", "")]
+            if not is_atlas_hook(h.get("command", ""), os.environ["ROOT"])]
         if not hooks[ev]:
             del hooks[ev]
     cfg["hooks"] = hooks
@@ -82,7 +83,9 @@ PYEOF
 done
 
 ROOT="$ROOT" CURSOR_DIR="$CURSOR_DIR" python3 - <<'PYEOF'
-import json, os
+import json, os, sys
+sys.path.insert(0, os.path.join(os.environ["ROOT"], "scripts"))
+from hook_owner import is_atlas_hook
 root, cursor = os.environ["ROOT"], os.environ["CURSOR_DIR"]
 cfg_path = os.path.join(cursor, "hooks.json")
 cfg = json.load(open(cfg_path)) if os.path.exists(cfg_path) else {"version": 1}
@@ -94,8 +97,7 @@ ours = {
 }
 for ev, entries in ours.items():
     existing = [h for h in hooks.get(ev, [])
-        if "scripts/core-context.sh" not in h.get("command", "")
-        and "scripts/guard.sh" not in h.get("command", "")]
+        if not is_atlas_hook(h.get("command", ""), os.environ["ROOT"])]
     hooks[ev] = existing + entries
 open(cfg_path, "w").write(json.dumps(cfg, indent=2) + "\n")
 PYEOF

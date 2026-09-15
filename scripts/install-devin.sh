@@ -19,7 +19,9 @@ if [ "$1" = "--remove" ]; then
   done
   rm -f "$DEVIN_DIR"/agents/atlas-*.md "$DEVIN_DIR"/agents/sniper-*.md
   ROOT="$ROOT" DEVIN_DIR="$DEVIN_DIR" python3 - <<'PYEOF'
-import json, os, re
+import json, os, re, sys
+sys.path.insert(0, os.path.join(os.environ["ROOT"], "scripts"))
+from hook_owner import is_atlas_hook
 devin = os.environ["DEVIN_DIR"]
 
 agents = os.path.join(devin, "AGENTS.md")
@@ -39,8 +41,7 @@ if os.path.exists(cfg_path):
     for ev, groups in list(hooks.items()):
         for g in groups:
             g["hooks"] = [h for h in g.get("hooks", [])
-                if "scripts/core-context.sh" not in h.get("command", "")
-                and "scripts/guard.sh" not in h.get("command", "")]
+                if not is_atlas_hook(h.get("command", ""), os.environ["ROOT"])]
         hooks[ev] = [g for g in groups if g.get("hooks")]
         if not hooks[ev]:
             del hooks[ev]
@@ -103,7 +104,8 @@ for src in glob.glob(os.path.join(root, "agents/atlas-*.md")):
     t = open(src).read()
     m = re.search(r"^model: (\w+)$", t, flags=re.M)
     if m and m.group(1) in models:
-        t = t.replace(m.group(0), f'model: {models[m.group(1)]}', 1)
+        model = models[m.group(1)]
+        t = t.replace(m.group(0) + "\n", f'model: {model}\n' if model else "", 1)
     open(os.path.join(devin, "agents", os.path.basename(src)), "w").write(t)
 PYEOF
 
@@ -111,7 +113,9 @@ PYEOF
 # (SessionStart self-heals if the block is removed; PreToolUse guards exec and
 # write_to_process). Both merge without touching other entries.
 ROOT="$ROOT" DEVIN_DIR="$DEVIN_DIR" python3 - <<'PYEOF'
-import json, os, re
+import json, os, re, sys
+sys.path.insert(0, os.path.join(os.environ["ROOT"], "scripts"))
+from hook_owner import is_atlas_hook
 root, devin = os.environ["ROOT"], os.environ["DEVIN_DIR"]
 core = open(os.path.join(root, "core/ATLAS.md")).read().strip()
 block = f"<!-- atlas:core:start -->\n{core}\n<!-- atlas:core:end -->"
@@ -139,8 +143,7 @@ for ev, groups in ours.items():
     existing = hooks.get(ev) or []
     for g in existing:
         g["hooks"] = [h for h in g.get("hooks", [])
-            if "scripts/core-context.sh" not in h.get("command", "")
-            and "scripts/guard.sh" not in h.get("command", "")]
+            if not is_atlas_hook(h.get("command", ""), os.environ["ROOT"])]
     hooks[ev] = [g for g in existing if g.get("hooks")] + groups
 open(cfg_path, "w").write(json.dumps(cfg, indent=2) + "\n")
 PYEOF

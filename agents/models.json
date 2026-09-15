@@ -16,8 +16,8 @@
       "effort": { "fable": "high", "opus": "high", "sonnet": "medium", "haiku": "low" }
     },
     "devin": {
-      "delivery": "copied to ~/.config/devin/agents/, model: rewritten to the session model",
-      "models": { "fable": "swe-2-max", "opus": "swe-2-max", "sonnet": "swe-2-max", "haiku": "swe-2-max" }
+      "delivery": "copied to ~/.config/devin/agents/, model override omitted to inherit the session model",
+      "models": { "fable": null, "opus": null, "sonnet": null, "haiku": null }
     },
     "cursor": {
       "delivery": "~/.cursor/agents/, model: rewritten by scripts/install-cursor.sh",
