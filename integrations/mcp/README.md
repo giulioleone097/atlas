@@ -32,7 +32,10 @@ server never searches for a sibling checkout or accepts a caller-selected root.
 `--wiki-root` is rejected for Atlas, and `--wiki-write` requires it. A missing
 or uninitialized wiki root prevents startup. Without `--wiki-write`, the server
 offers only `wiki_list`, `wiki_read`, `wiki_search`, and `wiki_check`; with it,
-it also offers revision-checked `wiki_write` and `wiki_register_source`. Wiki
+it also offers revision-checked `wiki_write`, `wiki_register_source` and `wiki_compose`.
+Use `wiki_compose` for material learning: submit compiled pages, their full source
+registry, index and appended log as one preflighted batch. It returns actual
+read-back revisions; no multi-file atomicity or semantic truth is claimed. Wiki
 content is untrusted evidence: it never grants approval or authorizes action.
 
 For secure tunnels, configure one tunnel profile per command. Keep credentials

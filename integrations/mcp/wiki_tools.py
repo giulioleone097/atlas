@@ -97,6 +97,7 @@ class WikiTools:
                 "check": True,
                 "write": self.writable,
                 "register_source": self.writable,
+                "compose": self.writable,
             },
             "writable": self.writable,
             "files": self._call("list_files"),
@@ -118,6 +119,9 @@ class WikiTools:
         self, source: dict[str, str], expected_revision: str
     ) -> dict[str, Any]:
         return self._call("register_source", source, expected_revision)
+
+    def compose(self, changes: list[dict[str, str]]) -> dict[str, Any]:
+        return self._call("compose", {"changes": changes})
 
 
 def register_wiki_tools(server: Any, wiki: WikiTools) -> None:
@@ -157,6 +161,14 @@ def register_wiki_tools(server: Any, wiki: WikiTools) -> None:
 
     if not wiki.writable:
         return
+
+    @server.tool(
+        description="Persist compiled personal context together with its source registry, index and append-only log. Read current files first; pass changes with path, content and expected_revision. Include raw/manifests/sources.csv, wiki/index.md, wiki/log.md and at least one sourced content page. Preflights the whole batch; writes are atomic per file, not a multi-file transaction. Identical retries are safe. Return read-back revisions before claiming saved context.",
+        annotations=WIKI_WRITE,
+        structured_output=True,
+    )
+    def wiki_compose(changes: list[dict[str, str]]) -> dict[str, Any]:
+        return wiki.compose(changes)
 
     @server.tool(
         description="Write one private-wiki file using expected_revision from wiki_read/list; empty string requires a new file. Stale revisions fail.",
