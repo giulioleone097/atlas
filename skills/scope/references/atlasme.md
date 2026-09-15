@@ -22,7 +22,7 @@ settled:
   reach: <domain> (<entry path:line>) -> <contract> -> <n consumers at HEAD>; <linked repository> (<n> | unread)
   risk: <the consequence in plain words>
   scenarios: <shared conditions and consequences; facts versus hypotheses>
-  simulation: <native/unavailable; persistence saved/unsaved/unavailable; state revision, branches, rounds, stop/evidence gap when run>
+  simulation: <trigger/reason; capability/result; persistence saved/unsaved/unavailable; root budget/lineage; state revision, branches, rounds, stop/evidence gap when run>
   review: <independent agent/lens | self-review>; dissent: <material objection | none>; reopen: <observation>
 open (deliberately): <what the user chose to leave undecided, or "none">
 map: <one flowchart, only when more than one domain is reached>
