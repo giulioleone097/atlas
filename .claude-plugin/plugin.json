@@ -1,7 +1,7 @@
 {
   "name": "atlas",
-  "description": "Brainstorm approaches, review scenarios, implement the smallest useful change and verify the outcome. Development, optimization and review across supported agent hosts.",
-  "version": "2.1.0",
+  "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
+  "version": "2.2.0",
   "author": {
     "name": "Giulio Leone",
     "url": "https://github.com/giulioleone097"

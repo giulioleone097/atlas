@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "atlas",
-  "description": "Brainstorm approaches, review scenarios, implement the smallest useful change and verify the outcome. Development, optimization and review across supported agent hosts.",
+  "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
   "owner": {
     "name": "Giulio Leone",
     "url": "https://github.com/giulioleone097"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "atlas",
-      "description": "Brainstorm approaches, review scenarios, implement the smallest useful change and verify the outcome. Development, optimization and review across supported agent hosts.",
+      "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
       "source": "./",
       "category": "development"
     }

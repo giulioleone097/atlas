@@ -59,7 +59,7 @@ setup? ──► scope ──► build ──► review ──► ship
 
 ## Doctrine
 
-`core/ATLAS.md` is the one text every session and every subagent gets, about 1.3k tokens: precedence (user over skill, and a blocking skill names itself), the goal lock (stated even when a skill's steps already fix its three parts), the map read before discovery, the reuse ladder with the never-add and never-remove lists, the operational bug rule (grep every caller, guard the shared function once), elision with `ceiling:` comments for deliberate shortcuts, indispensable-only tests with optional TDD, proof reported exactly, in-scope fixes and adjacent follow-ups, surgical edits and evidence before state changes, economical delegation with results read as claims, and a stop that closes every stated intention and reports for a reader who did not watch.
+`core/ATLAS.md` is the one text every session and every subagent gets, kept below the host injection limit: precedence (user over skill, and a blocking skill names itself), the goal lock (stated even when a skill's steps already fix its three parts), the map read before discovery, the reuse ladder with the never-add and never-remove lists, the operational bug rule (grep every caller, guard the shared function once), elision with `ceiling:` comments for deliberate shortcuts, indispensable-only tests with optional TDD, proof reported exactly, in-scope fixes and adjacent follow-ups, surgical edits and evidence before state changes, economical delegation with results read as claims, and a stop that closes every stated intention and reports for a reader who did not watch.
 
 It is written against the current guidance of both vendors and re-audited when either publishes a new model guide. From Anthropic's Claude Fable 5.1 guidance: goals and constraints rather than step choreography, sub-agents for parallel work, progress grounded in tool results, an assessment rather than a fix when the user asks a question, evidence before a state-changing command, a final report written outcome first for someone who was not there, no anti-formatting rules and no numeric word caps. From OpenAI's GPT-6 Astra and Codex guides: user instructions outrank a skill, bias to action with every intention closed before the turn ends, tests calibrated to the change, delegation stated explicitly, and descriptions that open with the trigger because Codex shortens them to about 45 characters when many plugins are installed. From both: no pressure language, prohibitions only where the failure is real and the reason stated, exact commands only for fragile bridges.
 
@@ -70,11 +70,11 @@ Every SKILL.md: frontmatter `name`, `description` opening with `Use when`, under
 | stage | branches | ends when |
 |---|---|---|
 | `setup` | `map.md` | files written, map current |
-| `scope` | `intake.md` (issues, PRs, reports, images, handoff and atlasme files), `atlasme.md`, `scenarios.md`, `asking.md` | card emitted and handed to build; no argument and no request in the conversation offers the latest handoff |
+| `scope` | `intake.md` (issues, PRs, reports, images, handoff and atlasme files), `atlasme.md`, `scenarios.md`, `context.md`, `composition.md`, `evolution.md`, `asking.md` | card emitted and handed to build; no argument and no request in the conversation offers the latest handoff |
 | `build` | `plan.md`, `debug.md`, `prove.md`, `fix.md`, `refactor.md`, `migrate.md`, `ui-taste.md` | acceptance proven and handed to review |
 | `review` | `shrink.md`, `slop.md`, `platform-native.md`, `audit.md`, `pr.md` | one pass printed with `ship: ready` or what blocks; `--address` when every reviewer thread has its line |
 | `ship` | `dossier.md`, `shapes.md`, `evidence.md`, `posting.md`, `learn.md`, `environment.md` | commits exist and any requested push, PR (with its CI awaited) or dossier ran; the block names `proof:`, `learned:` (or `proposed (not written)`) and `left:` |
-| `atlasme` | scope's `intake.md`, `atlasme.md`, `scenarios.md`, `asking.md` | reviewed tree or evidence checkpoint returned; authorized practice handed to howto without repeating analysis |
+| `atlasme` | scope's `intake.md`, `atlasme.md`, `scenarios.md`, `context.md`, `composition.md`, `evolution.md`, `asking.md` | reviewed tree or evidence checkpoint returned; authorized practice handed to howto without repeating analysis |
 | `howto` | scope's shared decision engine and asking procedure | authorized outcome proven or concrete blocker recorded in the same map; decision-only/read-only boundaries preserved |
 | `simplify` | review's `shrink.md`, `slop.md`, `audit.md`, `platform-native.md` | nothing left to cut in scope, proof run |
 | `handoff` | none | file written, path printed |
@@ -125,3 +125,7 @@ A prompt change is a hypothesis until a session proves it. `evals/run.py` runs f
 ## Sources
 
 `docs/sources.md` names every external plugin, skill and vendor guide this plugin took from, what was taken, and what was rejected with the reason.
+
+## Context and optional composition
+
+Scope owns durable-context retrieval and scenario analysis. `context.md` resolves declared project knowledge and relevant evidence; `evolution.md` supplies optional ambition-level candidates to the existing comparison. `composition.md` discovers a compatible skill on the actual host, sends a bounded source/authority/proof contract and returns results to the same owner. A Spotter parent retains life acceptance, wiki and priorities; Atlas retains technical implementation/proof. No package import, shared backend, forced companion installation or second controller is added. Personal knowledge never enters public artifacts without destination-specific authority.

@@ -1,7 +1,7 @@
 {
   "name": "atlas",
-  "version": "2.1.0",
-  "description": "Brainstorm approaches, review scenarios, implement the smallest useful change and verify the outcome. Development, optimization and review across supported agent hosts.",
+  "version": "2.2.0",
+  "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
   "author": {
     "name": "Giulio Leone",
     "url": "https://github.com/giulioleone097"
@@ -21,8 +21,8 @@
   "hooks": "./hooks/hooks.json",
   "interface": {
     "displayName": "Atlas",
-    "shortDescription": "Brainstorm, choose a path, implement and verify",
-    "longDescription": "Compare feasible approaches under common scenarios, challenge the choice with independent review, then carry authorized work through scope, build and verification. Reuse decisions and adapt from actual evidence. Small understood changes stay direct. Preserve meaningful architecture boundaries, add only indispensable tests, and fix real defects within scope. Ship only when authorized.",
+    "shortDescription": "Use context, evolve ideas, implement and prove",
+    "longDescription": "Read relevant declared wiki/project context, compare approaches and optional next/leap/transform evolution levels, then carry the reviewed choice through authorized implementation and proof. Compose compatible specialists from the live host with one owner and reusable results. Atlas works independently. Small understood changes stay direct; add only indispensable tests and ship only when authorized.",
     "developerName": "Giulio Leone",
     "category": "Developer Tools",
     "capabilities": [
@@ -32,7 +32,7 @@
       "Lifecycle hooks"
     ],
     "defaultPrompt": [
-      "Use howto to brainstorm this idea, review scenarios and implement the best-supported path.",
+      "Use howto --evolve to explore this outcome from its existing context and carry the selected path through verified work.",
       "Build the change under the current goal card.",
       "Review this diff for correctness, slop, and safety."
     ],

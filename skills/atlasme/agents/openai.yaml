@@ -1,7 +1,7 @@
 interface:
   display_name: "Atlas Me"
-  short_description: "Brainstorm approaches, scenarios and a reviewed choice"
-  default_prompt: "Use $atlasme to explore this idea from sourced facts, compare feasible approaches under shared scenarios, review the decision, resolve missing user values, and carry already-authorized work into howto without repeating the analysis."
+  short_description: "Brainstorm from context and explore the degree of change"
+  default_prompt: "Use relevant declared wiki/project context and optional --evolve levels; compose available specialists only for bounded needs. Use $atlasme to explore this idea from sourced facts, compare feasible approaches under shared scenarios, review the decision, resolve missing user values, and carry already-authorized work into howto without repeating the analysis."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true
