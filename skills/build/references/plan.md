@@ -2,7 +2,7 @@
 
 Read when the card is complex, an operational plan already exists or ticket creation is requested, including inherited `--tickets`. Reuse the existing plan and its settled tasks. Return to the caller after planning and ticket read-back; this procedure is not a separate public skill.
 
-1. The goal card is the input; plan from it.
+1. The goal card and originating mandate are the input. Preserve acceptance, scope, authorized actions, known constraints and continuation intent; derive technical subgoals through `references/agency.md`.
 2. Read the code the work touches before decomposing anything. List the files each task will create or modify and what each one owns after the change. Name new files, symbols and task titles from the repo's `CONTEXT.md` when one exists.
 3. Choose proof from existing checks or real exercises. Plan a new test only when indispensable under core's rule, naming the meaningful regression existing checks miss. Otherwise use `New test: none`; the existence or absence of a test suite alone decides nothing.
 4. Cut a task where a reviewer could reject it and still accept its neighbour. Fold setup, configuration, and docs into the task whose deliverable needs them. Every task ends in something independently provable.

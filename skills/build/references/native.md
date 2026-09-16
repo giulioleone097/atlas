@@ -24,6 +24,8 @@ These are discovery hints, verified against the linked docs on 2026-09-13; the c
 
 ## Execute, resume and finish
 
+At entry/resume, reuse the caller's bound mandate and feasible actions; only a direct, unbound entry reads `references/agency.md`. This lifecycle supplies only supported native continuation; the build controller owns action selection and adaptation even without a native goal.
+
 5. Let the bound native goal drive continued turns; Atlas supplies the scope/build/review/authorized ship sequence. Before another slice, reconcile tracked owners and plan projections through `references/tickets.md`, reread relevant native state, reuse current proof and choose only ready work inside the agreed scope. Never re-enter setup, republish issues, repeat completed work or clear a goal to force a new turn.
 6. Keep one execution owner per outcome. A goal and an observation-only monitor can coexist; a recurring callback must not execute the same issue while its native owner is active. Reuse the actual session/job reference. If ownership cannot be established, keep the callback read-only and report the gap rather than claiming an atomic lock. Do not add a competing Stop hook or poll loop.
 7. On interruption, approval wait or capability failure, save the exact next action and confirmed native session/goal/job references on the existing issue/plan/handoff. Record the observation as dated, never authoritative persisted host state. On host switch, reread the issue, artifacts and the new host's actual goal; an old id or transferred Markdown does not transfer a live loop. Pending questions follow `<plugin root>/skills/scope/references/asking.md` and remain pending.
