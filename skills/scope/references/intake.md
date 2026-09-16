@@ -2,16 +2,11 @@
 
 Read when the argument is an issue number, a URL, a work item, a pasted bug report, a transcript, an image or a file, including handoff, atlasme and howto maps, rather than a task description.
 
-1. Read the source. Run `sh <plugin root>/scripts/tracker.sh` (`<plugin root>` is the parent of the `skills/` directory this file lives in) for every item, pasted included: it names the forge, the CLI and whether it is authenticated, which step 4 and `--reply` depend on. A bare number or a URL is then fetched with the CLI the script named:
+1. Resolve the source identity before choosing a tool: provider/host, project or repository, stable ID and full URL. An explicit GitHub/GitLab issue, Linear/Jira issue or Azure work item uses that owner's available native connector or CLI, even when the code repository has another forge. Preserve the full identity through the card. Equal numbers or titles in different projects are not the same item.
 
-   | forge | item | pull request |
-   |---|---|---|
-   | github | `gh issue view <n> --comments` | `gh pr view <n> --comments`, `gh pr diff <n>` |
-   | gitlab | `glab issue view <n> --comments` | `glab mr view <n> --comments` |
-   | azure | `az boards work-item show --id <n>` | `az repos pr show --id <n>` |
-   | none, or `auth=missing` | the file the argument names, or `docs/tickets/<n>.md` | the local diff |
+   A bare number uses the project's declared tracker; with none, `sh <plugin root>/scripts/tracker.sh` (`<plugin root>` is the parent of the `skills/` directory) can identify a repository forge candidate. Resolve material ambiguity instead of guessing. Fetch with the resolved provider and explicit project/repository: GitHub `gh issue view <url> --comments`, GitLab `glab issue view <id> --repo <project> --comments`, Azure's native work-item read, or the available Linear/Jira connector. PR/MR URLs use that exact forge/project and its native PR read/diff.
 
-   The CLI is missing or logged out: say which one and what it needs, then work from what the user pasted. Never invent the item's content, and never install a tool to read it.
+   Missing access: name the unavailable operation and work from supplied content only as an unverified snapshot. An explicit remote owner remains selected; never fetch the same number from the code forge or substitute `docs/tickets/`. Local files are read only when they are the actual selected source. Never invent content or install a tool to read it. Ticket reconciliation belongs to `<plugin root>/skills/build/references/tickets.md`; intake carries authority without adding it.
 
    An image (a screenshot, a photo of a screen, a diagram) is read as the report: transcribe what it shows into a claim, the message, the state, the step it was taken at, before reproducing anything; its path is the `source:`. What the picture does not show is a missing detail for step 6, not a guess.
 
@@ -32,7 +27,7 @@ Read when the argument is an issue number, a URL, a work item, a pasted bug repo
 7. `--reply` posts what you found back on the item - reproduction result, what already exists, or the questions - after showing the text and getting the user's confirmation in this session. One comment, no agent attribution (the forge already records the author), and never a state change (no close, no label, no assignment) unless the user asked for that specific change.
 
 ```
-source: <forge>#<n> | <path> | pasted
+source: <provider; project/repository; stable ID; URL> | <path> | pasted
 claim: reproduced (<command>) | not reproduced (<what happened>) | not testable (<why>)
 already: implemented at <path:line> | rejected in <path> | new
 missing: <question> | none
