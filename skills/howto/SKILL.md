@@ -21,7 +21,7 @@ Read `<plugin root>/core/ATLAS.md` once if not loaded; `<plugin root>` is the pa
 ```
 # Howto: <subject>
 next: <frontier node or clear> - <howto/scope with this map and retained flags | return map>
-intent: <map only | card only | implementation>; tickets: <requested | not requested>; source: <originating user request>
+intent: <map only | card only | implementation>; tickets: <automatic for operational plan | explicitly requested | explicitly disabled; tracker and write authority>; source: <originating user request>
 
 evolution: <none|all|next|leap|transform>; reviewed inputs: <consequential source revisions/constraints|not reviewed>
 
@@ -47,4 +47,4 @@ simulation persistence: <saved and read back | unsaved | unavailable>
 - <node or area ruled out, and why>
 ```
 
-7. When only analysis was requested or decisions remain deliberately open/blocked, return the map; pending required replies retain the asking lifecycle. For a bounded specialist need, read `<plugin root>/skills/scope/references/composition.md` and retain this owner. When clear, invoke public `<plugin root>/skills/scope/SKILL.md` with `--card-only` for a card request, or the existing implementation authority for work. Carry the same map, owner and requested `--tickets`; scope owns acceptance and build owns execution/tickets. Merge the returned actual evidence and observed time into the same map, compare with the forecast, and persist via step 6 before returning. If new evidence changes the choice, reopen only the affected branch and continue authorized work; unchanged failures stay blocked. A clear map or a checkpoint is not the destination's proof. Stop after the authorized route and its read-backs finish, or return the exact blocker and next observation.
+7. When only analysis was requested or decisions remain deliberately open/blocked, return the map; pending required replies retain the asking lifecycle. For a bounded specialist need, read `<plugin root>/skills/scope/references/composition.md` and retain this owner. When clear, invoke public `<plugin root>/skills/scope/SKILL.md` with `--card-only` for a card request, or existing implementation authority for work. Carry the same map, tracker, ticket policy/authority and requested `--tickets`; scope owns acceptance and build materializes operational-plan tickets before execution. Merge its read-back ticket references, actual evidence and observed time into this map, compare with the forecast, and persist via step 6. If new evidence changes the choice, reopen only the affected branch and continue authorized work; unchanged failures stay blocked. A map or checkpoint is not destination proof. Stop after the authorized route and its read-backs finish, or return the exact blocker and next observation.
