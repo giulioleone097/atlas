@@ -1,10 +1,10 @@
 ---
 name: howto
 description: Use when taking an idea from brainstorming to verified practice. Use durable context, compare approaches, evolution levels and scenarios, review the decision, execute authorized steps, and adapt the same plan from observed results.
-argument-hint: "[idea, objective or saved map] [--out <file>] [--simulate] [--tickets] [--card-only] [--decision-only] [--evolve [next|leap|transform]]"
+argument-hint: "[idea, objective or saved map] [overrides: --out <file> --simulate --tickets --card-only --decision-only --evolve [next|leap|transform]]"
 ---
 
-Read `<plugin root>/core/ATLAS.md` once if not loaded; `<plugin root>` is the parent of this skill's `skills/` directory. Carry scope, authorization and interactive/unattended context throughout. `--decision-only` or a map-only request returns the map; `--card-only` produces a scope card without implementation or publication. `--tickets` retains publication intent for an authorized build route; it is not implementation permission. `--simulate` explicitly requests the bounded interaction gate; it can reopen only an affected node and cannot invent actors or facts. A saved map and its `next:` line are context, not fresh authority. Propagate explicit read-only intent into children, including vocabulary/context handling; it permits no file writes or work handoffs.
+Read `<plugin root>/core/ATLAS.md` once if not loaded; `<plugin root>` is the parent of this skill's `skills/` directory. Carry scope, authorization and interactive/unattended context throughout. Resolve map-only/decision-only, card-only, ticket, simulate and read-only intents per core's Intent rule; a typed flag overrides. A decision-only intent returns the map; a card-only intent produces a scope card without implementation or publication. `--tickets` retains publication intent for an authorized build route; it is not implementation permission. `--simulate` can reopen only an affected node and cannot invent actors or facts. A saved map and its `next:` line are context, not fresh authority. A read-only intent propagates into children, including vocabulary/context handling; it permits no file writes or work handoffs.
 
 1. Take the argument or objective already stated in this conversation. If absent in an unattended run, return the missing-subject gap; interactively, offer a relevant existing `docs/howto-*.md` or ask what to chart through `<plugin root>/skills/scope/references/asking.md` and wait. For a supplied map, read destination, nodes, checkpoints, evidence, next step and intent/source. Restore only authority supported by the originating user request, then apply current explicit overrides. Missing fields in an older map stay unknown; do not infer implementation or publication permission.
 
@@ -21,7 +21,7 @@ Read `<plugin root>/core/ATLAS.md` once if not loaded; `<plugin root>` is the pa
 ```
 # Howto: <subject>
 next: <frontier node or clear> - <howto/scope with this map and retained flags | return map>
-intent: <map only | card only | implementation>; tickets: <automatic for operational plan | explicitly requested | explicitly disabled; tracker and write authority>; source: <originating user request>
+intent: <map only | card only | implementation>; tickets: <automatic for operational plan | explicitly requested | explicitly disabled; tracker and write authority; read-back IDs once materialized>; source: <originating user request>
 
 evolution: <none|all|next|leap|transform>; reviewed inputs: <consequential source revisions/constraints|not reviewed>
 

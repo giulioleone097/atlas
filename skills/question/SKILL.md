@@ -1,7 +1,7 @@
 ---
 name: question
 description: Use when a decision depends on information another person holds. Prepare a focused, prioritized questionnaire with enough context and answer space for an asynchronous reply or a meeting.
-argument-hint: "[decision or topic that's blocked] [--out <file>]"
+argument-hint: "[decision or topic that's blocked] [override: --out <file>]"
 ---
 
 1. Take the argument as the decision or topic blocked on someone else's knowledge. Empty: ask what decision is blocked, in one line, through the host's question tool, and stop there.

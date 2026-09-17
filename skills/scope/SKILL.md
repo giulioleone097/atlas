@@ -1,7 +1,7 @@
 ---
 name: scope
 description: Use when incoming work needs source verification, a bounded outcome or acceptance criteria. Read the issue, document or handoff, resolve material unknowns, and prepare the task for implementation.
-argument-hint: "[task | issue number | url | file | pasted text] [--card-only] [--reply] [--simulate] [--tickets]"
+argument-hint: "[task | issue number | url | file | pasted text] [overrides: --card-only --reply --simulate --tickets]"
 ---
 
 1. Take the argument as the work; empty, the request already stated in this conversation is the work. Neither: look for the most recent handoff or atlasme file (`docs/handoff-*.md` and `docs/atlasme-*.md`); found, offer through the host's question tool to resume it, start something else, or stop, and continue with the answer; none, emit `blocked: task missing` and stop.

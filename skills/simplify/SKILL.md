@@ -1,7 +1,7 @@
 ---
 name: simplify
 description: Use when simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit. Remove demonstrated unnecessary complexity within scope and verify the result; audits report proposals.
-argument-hint: "[baseline | files] [--repo [path]] [--debt] [--rules]"
+argument-hint: "[baseline | files] [overrides: --repo [path] --debt --rules]"
 ---
 
 1. Resolve scope. `--repo [path]`, `--debt` or `--rules`: read `<plugin root>/skills/review/references/audit.md` (`<plugin root>` is the parent of the `skills/` directory this file lives in) and stop there. Otherwise the files given; else the task's actual diff: the changes since the named baseline or the branch's merge-base with the default branch, plus the staged, unstaged and new files, so a committed-only range does not hide the work just written. Nothing named and no diff: ask which files through the host's question tool, do not guess.

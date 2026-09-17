@@ -1,7 +1,7 @@
 interface:
   display_name: "Howto"
   short_description: "Use context, evolve the approach, act and verify"
-  default_prompt: "Use relevant declared wiki/project context and optional --evolve levels; compose available specialists only for bounded needs. Use $howto to explore approaches and possible scenarios, challenge the choice with decision review, execute the smallest authorized step, verify its outcome and adapt the same map from evidence. Preserve read-only and decision-only limits."
+  default_prompt: "Use relevant declared wiki/project context and the degree of change read from wording or --evolve; compose available specialists only for bounded needs. Use $howto to explore approaches and possible scenarios, challenge the choice with decision review, execute the smallest authorized step, verify its outcome and adapt the same map from evidence. Preserve read-only and decision-only limits."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

@@ -1,7 +1,7 @@
 ---
 name: intel
 description: Use when a research question needs evidence from official documentation, specifications, source code or first-party APIs. Delegate the investigation and produce a Markdown brief with inline source citations.
-argument-hint: "[the question to research] [--out <file>]"
+argument-hint: "[the question to research] [override: --out <file>]"
 ---
 
 1. Take the argument as the question. Empty: ask what to research in one line and stop there.
