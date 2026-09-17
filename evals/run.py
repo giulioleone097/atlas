@@ -46,6 +46,12 @@ def core_file(plugin_dir):
     return plugin_dir / "core" / "ATLAS.md"
 
 
+def write_fixture(path, content):
+    # a fixture may live under a subdirectory (docs/howto-*.md); a real session's Write tool creates it
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content)
+
+
 def selftest():
     failed = 0
     for name, t in TASKS.items():
@@ -54,9 +60,9 @@ def selftest():
             expect_pass = label != "bad"
             with tempfile.TemporaryDirectory() as d:
                 for fname, content in t["seed"].items():
-                    (Path(d) / fname).write_text(content)
+                    write_fixture(Path(d) / fname, content)
                 for fname, content in (reference if isinstance(reference, dict) else {t["file"]: reference}).items():
-                    (Path(d) / fname).write_text(content)
+                    write_fixture(Path(d) / fname, content)
                 r = t["score"](Path(d))
                 axis = "correct" if t["axis"] == "correct" else "safe"
                 ok = bool(r[axis]) == expect_pass and (r["correct"] == 1)
@@ -82,7 +88,7 @@ def selftest():
 def run_cell(task, arm, model, keep_dir, plugin_dir):
     work = Path(tempfile.mkdtemp(prefix=f"atlas-eval-{task}-{arm}-"))
     for fname, content in TASKS[task]["seed"].items():
-        (work / fname).write_text(content)
+        write_fixture(work / fname, content)
     # --bare: no user settings, memory, other plugins or hooks, so both arms start equal. Hooks off
     # means the doctrine is not injected by the plugin's own hook: the atlas arm carries it as an
     # appended system prompt, and its skills and agents through --plugin-dir.

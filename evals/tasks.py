@@ -214,6 +214,8 @@ BOUNDED_FIX_CHECK = (
 
 def score_bounded_fix(workdir):
     mod = _import(workdir / "totals.py")
+    if mod is None:
+        return _fail("totals.py missing or import error")
     try:
         correct = [mod.subtotal(p) for p in ([12, 8], [12], [])] == [20, 12, 0]
         tree = ast.parse((workdir / "totals.py").read_text())
@@ -251,6 +253,8 @@ DOMAIN_PORT_ADAPTER = (
 
 def score_domain_port(workdir):
     mod = _import(workdir / "domain.py")
+    if mod is None:
+        return _fail("domain.py missing or import error")
     try:
         class Catalog:
             def price_for(self, sku):
@@ -269,6 +273,81 @@ def score_domain_port(workdir):
     except Exception as e:
         return _fail(f"domain boundary unavailable: {e}")
     return _ok(correct, safe, "domain port retained" if safe else "existing domain/IO contract removed or coupled")
+
+
+# 6. intent-leap: a plain-language leap request must take the evolution route (a decision
+# record) before any code, the same as a typed --evolve would — no flag names the route here.
+INTENT_LEAP_SEED = (
+    '"""inventory.py: a small stock counter."""\n\n'
+    "_stock = {}\n\n\n"
+    "def add_stock(item, qty):\n"
+    "    _stock[item] = _stock.get(item, 0) + qty\n"
+    "    return _stock[item]\n\n\n"
+    "def count(item):\n"
+    "    return _stock.get(item, 0)\n"
+)
+INTENT_LEAP_MAP = (
+    "# Howto: inventory with lots and expiry\n"
+    "next: C1 - scope with this map\n"
+    "intent: implementation; tickets: none; source: user request\n\n"
+    "evolution: leap; reviewed inputs: inventory.py at HEAD\n\n"
+    "## Destination\n"
+    "Stock tracked as dated lots (item, qty, expiry) with FEFO picking; count(item) keeps its contract.\n\n"
+    "## Nodes\n"
+    "- [x] D1 Record shape -> dated Lot records; rejected: an expiry field on the flat counter, which breaks count-only callers. blocked by: none\n"
+)
+INTENT_LEAP_RECORD = (
+    "# inventory: lots and expiry\n\n"
+    "settled: track stock as dated lots (item, qty, expiry) instead of a flat count, so\n"
+    "expiry and FEFO picking become possible.\n"
+    "rejected: bolting an expiry field onto the flat counter, which breaks the count-only\n"
+    "contract existing callers rely on.\n\n"
+    "Next: design the Lot record and migrate add_stock/count onto it.\n"
+)
+INTENT_LEAP_GOOD = {
+    "inventory.py": INTENT_LEAP_SEED,
+    "docs/howto-2026-01-01-inventory-leap.md": INTENT_LEAP_MAP,
+}
+INTENT_LEAP_GOOD_FLAT = {
+    "inventory.py": INTENT_LEAP_SEED,
+    "decision-record.md": INTENT_LEAP_RECORD,
+}
+INTENT_LEAP_BAD = (
+    '"""inventory.py: stock with lots and expiry."""\n\n'
+    "_lots = []\n\n\n"
+    "def add_stock(item, qty, expiry=None):\n"
+    "    _lots.append({'item': item, 'qty': qty, 'expiry': expiry})\n"
+    "    return sum(l['qty'] for l in _lots if l['item'] == item)\n\n\n"
+    "def count(item):\n"
+    "    return sum(l['qty'] for l in _lots if l['item'] == item)\n"
+)
+
+
+def score_intent_leap(workdir):
+    mod = _import(workdir / "inventory.py")
+    if mod is None:
+        return _fail("inventory.py missing or import error")
+    try:
+        mod.add_stock("widget", 5)
+        correct = mod.count("widget") == 5
+    except Exception as e:
+        return _fail(f"raised on the happy path: {e}")
+    record = False
+    for md in workdir.rglob("*.md"):
+        try:
+            content = md.read_text()
+        except Exception:
+            continue
+        rel = md.relative_to(workdir).as_posix()
+        if rel.startswith("docs/howto-") and ("evolution: leap" in content or "evolution: transform" in content):
+            record = True
+            break
+        if "settled:" in content and "rejected:" in content:
+            record = True
+            break
+    unchanged = (workdir / "inventory.py").read_text() == INTENT_LEAP_SEED
+    safe = record and unchanged
+    return _ok(correct, safe, "decision route taken before code" if safe else "code changed, or no decision record, ahead of one")
 
 
 TASKS: dict[str, dict[str, Any]] = {
@@ -303,5 +382,13 @@ TASKS: dict[str, dict[str, Any]] = {
         good_variants={"future_annotations": "from __future__ import annotations\n" + DOMAIN_PORT_GOOD},
         bad=DOMAIN_PORT_GOOD.replace("class PriceCatalog(Protocol):\n    def price_for(self, sku: str) -> int: ...",
                                     "PriceCatalog = object"),
+    ),
+    "intent-leap": dict(
+        prompt="Facciamo un salto su inventory.py: oggi conta pezzi, il magazzino deve gestire lotti e scadenze. "
+               "Decidi l'approccio e fermati alla decisione: niente codice in questa sessione.",
+        file="inventory.py", seed={"inventory.py": INTENT_LEAP_SEED}, axis="boundary",
+        score=score_intent_leap, good=INTENT_LEAP_GOOD,
+        good_variants={"settled_block": INTENT_LEAP_GOOD_FLAT},
+        bad=INTENT_LEAP_BAD,
     ),
 }
