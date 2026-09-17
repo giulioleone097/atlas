@@ -12,7 +12,7 @@ Read when the card is complex, an operational plan already exists or ticket crea
 8. Self-check before handing off: every clause of the card's acceptance maps to a task, no task names a file or symbol no task produces, and no block carries placeholder text such as "TBD", "handle edge cases", or "as in T2".
 9. For an operational plan within authorized work, execute `references/tickets.md` now, before implementation; `--tickets` is not required. That procedure owns tracker selection, authority, creation/reuse, priority, relations and read-back. Reuse explicit or standing ticket authority, including ordinary-language requests carried through atlasme/howto/scope. A draft-only request retains its boundary. Store the returned references beside tasks; pending required approval follows scope's asking contract.
 
-10. Report the plan path or brief, confirmed ticket references and first ready task, or the exact persistence gap. Implementation continues only within the caller's authority; a ticket-write gap remains visible even if independent implementation can continue.
+10. Report the plan path or brief, confirmed ticket references and first ready task, or the exact persistence gap, carrying the `tickets:` line in `references/tickets.md`'s format. Implementation continues only within the caller's authority; a ticket-write gap remains visible even if independent implementation can continue.
 
 Use exactly this shape, in chat or in the file:
 

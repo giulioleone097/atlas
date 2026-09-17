@@ -31,6 +31,7 @@ proof: <command> — pass | reused
 pushed: <branch> | not pushed
 PR: <url> | not requested
 ci: pass | fail (<check>: new | also on base) | running | none
+tickets: <IDs and reconciled state read back | none | unavailable: <gap>>
 learned: <path> | proposed (not written): <path> | nothing to record
 left: <path> (<why>), ... | none
 ```

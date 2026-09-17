@@ -1,7 +1,7 @@
 ---
 name: build
 description: Use when implementing a feature, fixing a bug, refactoring or migrating code. Take the smallest correct path, investigate unknown causes, and complete scoped repairs, review and verification.
-argument-hint: "[goal card | what to build | the failure] [--tickets] [--no-review]"
+argument-hint: "[goal card | what to build | the failure] [overrides: --tickets --no-review]"
 ---
 
 1. Take the goal card from `scope` or from the argument when one exists; otherwise lock the goal per core in one line, stating any chosen reading. An issue number, a URL, an image, a handoff or atlasme file is scope's input, not a card: invoke `scope` with it (Skill tool `atlas:scope`, `$scope` on Codex) and stop here; its intake reads the source, emits the card and invokes `build` with it.
@@ -25,8 +25,9 @@ argument-hint: "[goal card | what to build | the failure] [--tickets] [--no-revi
 ```
 <path> — <what changed>
 proof: <command> — pass | fail | unavailable | reused
+tickets: <references/tickets.md's line | none | unavailable: <gap>>
 status: DONE | DONE_WITH_CONCERNS: <c> | BLOCKED: <b> | NEEDS_CONTEXT: <w>
 follow-ups: <one line each, or "none">
 ```
 
-Then invoke `review` on the actual task diff (Skill tool `atlas:review`, `$review` on Codex) unless the short path already completed local review or `--no-review` was given; the flag skips only that handoff, and the short path's local review still runs. Record the returned proof and remaining delivery on the same tickets through `references/tickets.md`, then reconcile native completion through `references/native.md` only at the outer boundary. Requested shipping remains part of acceptance. Do not commit here; ship runs when asked.
+In files mode the `tickets:` line is followed by the `board:` table `references/tickets.md` defines, read from the store in this turn. Then invoke `review` on the actual task diff (Skill tool `atlas:review`, `$review` on Codex) unless the short path already completed local review or `--no-review` was given; the flag skips only that handoff, and the short path's local review still runs. Record the returned proof and remaining delivery on the same tickets through `references/tickets.md`, then reconcile native completion through `references/native.md` only at the outer boundary. Requested shipping remains part of acceptance. Do not commit here; ship runs when asked.

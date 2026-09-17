@@ -1,7 +1,7 @@
 ---
 name: handoff
 description: Use when unfinished work must continue in another session. Save the current branch, edits, verified results, settled decisions, blockers and exact next action without duplicating existing artifacts.
-argument-hint: "[what the next session is for] [--out <file>]"
+argument-hint: "[what the next session is for] [override: --out <file>]"
 ---
 
 1. Take the argument as what the next session is for. Empty: hand off the work as it stands.
@@ -26,6 +26,7 @@ next: <the exact next action> - call `<skill>` with <argument>
 
 ## Where it stands
 <branch, last commit, working tree, stage that finished>
+tickets: <IDs or URLs and the state each was last read at | none | unavailable: <gap>>
 
 ## Proven
 - <claim> - `<command>` - <exact result>
