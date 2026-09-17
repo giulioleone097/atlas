@@ -1,6 +1,6 @@
 # Explore the degree of change
 
-Conditional input to `scenarios.md`, not a separate brainstorming, review or implementation loop. Use when core's Intent rule resolves a degree of change (`--evolve [next|leap|transform]` typed, or equivalent wording). Bare `--evolve` compares the feasible levels; an explicit level focuses exploration without committing to that level.
+Conditional input to `scenarios.md`, not a separate loop. Core's Intent rule resolves the degree of change from explicit `--evolve [next|leap|transform]`, equivalent wording or evidence that the current approach cannot meet the outcome. Without an override, choose the smallest useful exploration level; a failed or inadequate small step can justify leap/transform candidates within the same goal. Bare `--evolve` compares feasible levels; an explicit level focuses exploration without committing to it.
 
 | Level | Question that distinguishes its approach |
 |---|---|

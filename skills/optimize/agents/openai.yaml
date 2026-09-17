@@ -1,7 +1,7 @@
 interface:
   display_name: "Optimize"
   short_description: "Improve a measured metric while preserving guard limits"
-  default_prompt: "Use $optimize with the stated metric and scope. Measure the baseline, compare bounded hypotheses, preserve guard limits and retain only verified improvements beyond noise."
+  default_prompt: "Use $optimize to recommend KPIs and guards from relevant presets, the outcome and repository evidence. Settle an unspecified priority through the harness's permitted native question tool; reuse explicit choices and choose technical options autonomously. Test alternatives in isolated worktrees, measure their KPIs, then test promising combinations against the current champion within one budget. Retain only verified gains beyond noise and land them safely."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

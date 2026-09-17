@@ -110,7 +110,7 @@ the work through. `setup` installs the doctrine in a project and builds its
 map; the map is refreshed by the model when its stamp is behind facts needed for
 the task. Type a
 stage name only to run one alone or with flags.
-`atlasme`, `simplify`, `handoff` and `optimize` are entry points you type by name:
+`atlasme`, `simplify`, `handoff` and `optimize` can be selected automatically or invoked by name:
 an idea explored through scenarios and a reviewed choice, a shrink pass on code nobody asked
 to review, a session written down for the next one (which resumes it through
 `scope <file>`), and a measured number pushed toward a target by rounds of
@@ -135,7 +135,7 @@ parallel hypotheses that keep only what beats the baseline.
 | `ship` | committing verified work, pushing changes, opening a PR or preparing its description | Deliver verified changes or prepare a PR description |
 | `simplify` | simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit | Simplify scoped code while preserving its behavior |
 
-`atlasme` and `howto` read relevant declared wiki/project context before choosing. Optional `--evolve [next|leap|transform]` compares the next useful step, a substantial leap and a changed solution model, using the same scenario/review engine and actual constraints. `improve` keeps code-health ownership and routes outcome evolution here.
+Atlas selects routes and technical options from the outcome, repository evidence and available resources; flags override those selections. `atlasme`, `howto` and `scope` retain choices and evidence through handoffs. Missing technical flags never require configuration questions. Atlas recommends KPIs and asks only for unsettled priorities, user values or authority through the permitted native question tool. Evolution starts at the smallest useful level and expands when evidence rules out the current approach; `--evolve [next|leap|transform]` overrides that selection. Explicit read-only, scope, model and resource limits remain binding.
 
 Available specialist skills can supply bounded context or work through `skills/scope/references/composition.md`. Atlas owns software proof; a Spotter parent owns life priorities and personal knowledge. Neither plugin is required by the other. A visited owner/capability chain prevents mutual controller loops; relevant evidence returns to the same map.
 
@@ -147,7 +147,7 @@ Use `howto <objective>` for brainstorming through practice: define outcome and p
 
 The shared decision engine belongs to scope (`atlasme.md`, `scenarios.md` and internal `simulation.md`); howto calls it directly, so public skills cannot bounce back and repeat the same brainstorming. No simulator runtime, dependency, public mega-skill, council log or duplicate issue backlog is required.
 
-When a decision requires an experiment, `howto` can execute the smallest ready evidence checkpoint within existing preparation authority, incorporate its verified result and continue the map. A checkpoint does not complete the parent goal. Map-only/read-only requests retain that checkpoint as a proposed next step.
+When a decision requires an experiment, `howto` runs the smallest ready checkpoint within existing authority: `optimize` for measurable alternatives and combinations, otherwise `scope`. Optimize recommends KPI presets from context, explains its preferred metric and offers relevant alternatives through native questions when the priority is unspecified. Explicit KPI choices are reused; commands, scope and bounded options are selected autonomously; each candidate has its own Git worktree and equivalent inputs. Coordinator measurements are serial, compare with a fresh champion control and reject noise, changed workloads or broken guards. Promising improvements are combined and remeasured, including reconciled edits to the same file, within one root budget. The ledger records lineage, candidate outcomes and untested options. Dirty input can be snapshotted without touching the user's index; recovery state survives until checked integration and review pass. A checkpoint never completes the parent goal; map-only/read-only requests keep it as a proposed step.
 
 Every stage keeps its branches in `references/`: the root file is a router, read in full, and a branch is read only when its case applies.
 

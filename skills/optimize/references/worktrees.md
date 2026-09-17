@@ -1,0 +1,21 @@
+# Isolate experiments and preserve their result
+
+Owned by optimize. Use native Git worktrees and existing project setup; no simulator service, dependency or second task store.
+
+1. Read Git status, index, revision, worktrees and selected ledger before mutation. Record starting revision and hashes/status of relevant tracked and task-owned untracked inputs. Editable paths and fixed benchmark/check inputs are distinct: workers never edit the latter to win. Resolve globs to explicit owned paths for staging and diffs.
+
+2. A clean relevant source uses its current commit. For authorized uncommitted input, create an isolated snapshot with a temporary Git index (`GIT_INDEX_FILE`): seed it with the current commit, add relevant current files there, then `git write-tree` and `git commit-tree`. Preserve source index, branches and working files, including staging boundaries; never stash, reset or commit the user's checkout. Record snapshot identity and included paths. Exclude credentials and ignored artifacts from Git; supply authorized runtime inputs separately. If needed input cannot be reproduced safely, name that specific blocker.
+
+3. An existing branch is resumable only with matching repository, ledger, mandate, source/snapshot, workload/setup and owned paths. Reuse its champion, candidates and spent budget after verification. Changed inputs require rebaselining affected evidence, never calling old KPIs current. An unrelated or unverifiable branch stays untouched; choose a unique run name, or report missing provenance when explicitly asked to resume it. Do not reset another run or create a parallel owner for an active one.
+
+4. Put detached baseline/candidate worktrees under a task-owned temporary directory using `git worktree add --detach <dir> <exact base>`. Install/build through existing project setup. Every tree receives equivalent fixed inputs/environment. Start measured processes from that worktree with separate ports, data and caches where mutable state could leak; record identities and clean up only owned processes. A command against an existing shared server is not worktree proof: supply a checkout-local launcher within authority, otherwise report that blocker. Never point experimental writes at production or shared data.
+
+5. After verification commit only the candidate's owned changed paths in its experiment tree; advance only this run's `optimize/<slug>` branch. Keep the exact root-to-champion patch and promising candidate revisions/patches plus their bases for recombination. The ledger is outside candidate edits and references these artifacts. Remove owned discarded worktrees only after useful changes and measurements are retained; inspect dirty or unexpected files first. Never force-remove the only recovery copy.
+
+6. Before landing reread source HEAD, relevant files and staging state. Generate the diff from recorded snapshot to champion, restricted to owned paths. Preflight with `git apply --check`; a three-dot diff against moving HEAD does not prove source compatibility. If relevant source/runtime inputs changed, reconcile the champion on a fresh snapshot without overwriting user edits, and remeasure fresh control and candidate before landing. A conflict blocks integration only: retain champion, patches and exact resume step.
+
+7. Apply the checked task patch without changing the user's index; record exactly what this run integrated. Run final metric, guards, regression and review as optimize requires. On failure retain recovery artifacts and repair or preflight reversing only this run's patch. Reverse only when post-apply files still match this run's recorded result; otherwise reconcile concurrent changes explicitly. Never use whole-tree restore/reset.
+
+8. After final proof and ledger read-back remove owned worktrees and experiment branch when no unresolved recovery depends on them. Retain measured results and artifacts promised for resumption. Temporary experiment commits are scaffolding, not a source commit or release. Missing persistence is reported, never a claim that a stopped run can resume.
+
+Return root/champion identities, source comparison, owned worktrees/processes, checked integration and recovery status. Stop when the caller's requested setup, resume or integration operation has been verified.
