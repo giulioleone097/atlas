@@ -2,12 +2,7 @@
 name: atlas-branch-analyst
 description: Explores one technical decision branch and returns evidence, conditional outcomes and needed child decisions without writes.
 model: sonnet
-tools: Read, Grep, Glob, Bash
-allowed-tools:
-  - read
-  - grep
-  - glob
-  - exec
+tools: [Read, Grep, Glob, Bash, read, grep, glob, exec]
 readonly: true
 ---
 

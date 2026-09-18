@@ -74,7 +74,7 @@ import json, os, sys
 root = sys.argv[1]
 bad = 0
 EVENTS = {
-    "hooks/hooks.json": {"SessionStart", "SubagentStart", "PreToolUse"},          # Claude Code + Codex
+    "hooks/claude-codex.json": {"SessionStart", "SubagentStart", "PreToolUse"},          # Claude Code + Codex
     "hooks.json": {"PreToolUse", "PostToolUse", "PermissionRequest",              # Devin (plugin root)
                    "UserPromptSubmit", "Stop", "PostCompaction", "SessionStart", "SessionEnd"},
     "hooks/cursor-hooks.json": {"sessionStart", "sessionEnd", "preToolUse",       # Cursor
@@ -107,7 +107,7 @@ root = sys.argv[1]
 for f in (".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
           ".codex-plugin/plugin.json", ".agents/plugins/marketplace.json",
           ".devin-plugin/plugin.json", ".cursor-plugin/plugin.json",
-          "hooks/hooks.json", "hooks.json", "hooks/cursor-hooks.json",
+          "hooks/claude-codex.json", "hooks.json", "hooks/cursor-hooks.json",
           "agents/models.json"):
     json.load(open(f"{root}/{f}"))
 reg = json.load(open(f"{root}/agents/models.json"))

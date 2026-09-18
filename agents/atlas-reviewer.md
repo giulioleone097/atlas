@@ -2,12 +2,7 @@
 name: atlas-reviewer
 description: Reviews a proposed decision or an exact diff against sources and constraints. Challenges assumptions and returns grounded findings; the lead selects or repairs. Read-only, with no minimum reviewer team.
 model: opus
-tools: Read, Grep, Glob, Bash
-allowed-tools:
-  - read
-  - grep
-  - glob
-  - exec
+tools: [Read, Grep, Glob, Bash, read, grep, glob, exec]
 readonly: true
 ---
 

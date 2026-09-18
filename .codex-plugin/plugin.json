@@ -1,6 +1,6 @@
 {
   "name": "atlas",
-  "version": "2.10.1",
+  "version": "2.10.2",
   "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
   "author": {
     "name": "Giulio Leone",
@@ -18,7 +18,7 @@
     "quality"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
+  "hooks": "./hooks/claude-codex.json",
   "interface": {
     "displayName": "Atlas",
     "shortDescription": "Use context, evolve ideas, implement and prove",

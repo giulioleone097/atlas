@@ -206,7 +206,7 @@ One hooks file per host family — the events and the output shape differ, so
 they do not share a file. All scripts are POSIX `sh` + `python3 -c` (no node,
 no jq):
 
-- `hooks/hooks.json` — Claude Code and Codex. `SessionStart` and
+- `hooks/claude-codex.json` — Claude Code and Codex. `SessionStart` and
   `SubagentStart` run `scripts/core-context.sh`, which injects
   `core/ATLAS.md` as `additionalContext` so the doctrine is active
   every turn and inside every subagent. `SubagentStart` has no matcher, so it
@@ -250,7 +250,7 @@ its hooks file.
 ## Codex notes
 
 - Skills: same files, invoked as `$name` instead of `/atlas:name`.
-- Hooks: same `hooks/hooks.json`; trust it once in `/hooks` (see Install).
+- Hooks: same `hooks/claude-codex.json`; trust it once in `/hooks` (see Install).
 - Agents: not bundled — `scripts/install-codex-agents.sh` generates
   `atlas_scout`, `atlas_worker`, `atlas_reviewer`, `atlas_integrator`
   (hyphens become underscores) as `~/.codex/agents/*.toml`; `build`,
@@ -270,7 +270,7 @@ block is present the hook injects nothing at either event, so the doctrine costs
 its tokens once. Teammates without the plugin get the same rules from the file.
 Re-run after a core update; the block is replaced, your sections stay.
 
-- Codex substitutes `${CLAUDE_PLUGIN_ROOT}` in `hooks/hooks.json` only. Inside a skill body neither host expands a variable, and Codex presents skills to the model as absolute skill roots, so every path in a skill is written relative to the file that names it (`<this skill>/scripts/…`, `<plugin root>/scripts/…`); `scripts/check.sh` fails on any `CLAUDE_SKILL_DIR` or `${CLAUDE_PLUGIN_ROOT}` inside a skill or agent.
+- Codex substitutes `${CLAUDE_PLUGIN_ROOT}` in `hooks/claude-codex.json` only. Inside a skill body neither host expands a variable, and Codex presents skills to the model as absolute skill roots, so every path in a skill is written relative to the file that names it (`<this skill>/scripts/…`, `<plugin root>/scripts/…`); `scripts/check.sh` fails on any `CLAUDE_SKILL_DIR` or `${CLAUDE_PLUGIN_ROOT}` inside a skill or agent.
 
 ## Devin and Cursor notes
 
