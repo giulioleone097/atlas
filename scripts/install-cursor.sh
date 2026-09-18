@@ -103,5 +103,6 @@ open(cfg_path, "w").write(json.dumps(cfg, indent=2) + "\n")
 PYEOF
 
 n=$(ls -d "$CURSOR_DIR"/skills/atlas-*/ 2>/dev/null | wc -l | tr -d ' ')
-echo "atlas: installed for Cursor in $CURSOR_DIR ($n skills, 4 agents, doctrine hook, guard)"
+agent_count=$(ls -1 "$ROOT"/agents/atlas-*.md | wc -l | tr -d ' ')
+echo "atlas: installed for Cursor in $CURSOR_DIR ($n skills, $agent_count agents, doctrine hook, guard)"
 echo "atlas: open a new Cursor agent session; stages answer to /atlas-<stage>"

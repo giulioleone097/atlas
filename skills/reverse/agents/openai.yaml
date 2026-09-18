@@ -1,0 +1,6 @@
+interface:
+  display_name: "Reverse"
+  short_description: "Turn achieved results into proven reusable practices"
+  default_prompt: "Use $reverse to reconstruct which practices contributed to this achieved result, challenge attribution, and internalize the minimum effective method within its proven scope and existing authority."
+policy:
+  allow_implicit_invocation: true
