@@ -1,7 +1,7 @@
 interface:
   display_name: "Improve"
   short_description: "Assess codebase structure and choose an improvement"
-  default_prompt: "Use $improve to assess this codebase concern. Choose the relevant simplification, optimization or audit procedure, or investigate structure and propose a bounded improvement."
+  default_prompt: "Use $improve to reuse validated practices, reverse any supplied achieved result and carry the next bounded improvement through its appropriate procedure, proof and learning receipt."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

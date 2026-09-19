@@ -1,7 +1,7 @@
 interface:
   display_name: "Optimize"
   short_description: "Improve a measured metric while preserving guard limits"
-  default_prompt: "Use $optimize to recommend KPIs and guards from relevant presets, the outcome and repository evidence. Settle an unspecified priority through the harness's permitted native question tool; reuse explicit choices and choose technical options autonomously. Test alternatives in isolated worktrees, measure their KPIs, then test promising combinations against the current champion within one budget. Retain only verified gains beyond noise and land them safely."
+  default_prompt: "Use $optimize to choose relevant KPIs and fixed guards, settle only missing human priorities, and compare isolated alternatives within one budget. Save every verified gain beyond noise as an owned local Git commit with a retained ref and ledger read-back before advancing, including useful non-winning alternatives. Compound only from saved checkpoints, verify the final integrated tree, and retain gain history after cleanup. Bind a requested continuous run to available native goal primitives without creating a second owner or inventing budgets."
   brand_color: "#1A1A1A"
 policy:
   allow_implicit_invocation: true

@@ -5,9 +5,9 @@
 One plugin for the whole development loop, for Claude Code, Codex, Devin and
 Cursor, with a native skills-and-rules adapter for Antigravity. Lock the
 outcome, take the shortest safe path, prove only changed behavior, stop. Five
-stages carry setup through ship, nine entry points are typed by name (atlasme,
-simplify, handoff, optimize, intel, question, howto, prototype, improve);
-four agents cover locating, bounded implementation, review, and integration.
+stages carry setup through ship, ten entry points are typed by name (atlasme,
+simplify, handoff, optimize, intel, question, howto, prototype, improve, reverse);
+five agents cover locating, bounded implementation, review, integration and branch analysis.
 
 ## Install
 
@@ -126,20 +126,33 @@ parallel hypotheses that keep only what beats the baseline.
 | `howto` | brainstorming must become a practical, verifiable outcome | Compare scenarios, review choices, execute authorized steps and adapt from evidence |
 | `improve` | assessing codebase structure or choosing a broader improvement | Assess codebase structure and choose an improvement |
 | `intel` | a research question needs evidence from official documentation, specifications, source code or first-party APIs | Research a question and produce a cited evidence brief |
-| `optimize` | improving a measurable performance, resource or quality metric | Improve a measured metric while preserving guard limits |
+| `optimize` | improving a measurable performance, resource or quality metric | Save every verified gain as a durable Git checkpoint, then compound safely |
 | `prototype` | a design decision needs an interactive experiment | Test a design with disposable logic or UI prototypes |
 | `question` | a decision depends on information another person holds | Prepare a questionnaire for someone holding missing facts |
 | `review` | reviewing a code change, auditing a repository or addressing PR feedback | Review code, repair scoped defects and verify the result |
+| `reverse` | reconstructing how an achieved result can be replicated | Distill supported practices into a minimal directive; expand causal evidence with --drilldown or implementations with --kit |
 | `scope` | incoming work needs source verification, a bounded outcome or acceptance criteria | Verify incoming work and define its outcome and proof |
 | `setup` | explicit installation/removal of project instructions, or discovery via `setup --map` | Configure Atlas project rules or refresh its repository map |
-| `ship` | committing verified work, pushing changes, opening a PR or preparing its description | Deliver verified changes or prepare a PR description |
+| `ship` | committing verified work, pushing changes, opening a PR or preparing its description | Deliver verified changes with a PR dossier and domain/file drilldown by default |
 | `simplify` | simplifying code while preserving its behavior, or requesting a complexity, debt or rules audit | Simplify scoped code while preserving its behavior |
 
 Atlas selects routes and technical options from the outcome, repository evidence and available resources; flags override those selections. `atlasme`, `howto` and `scope` retain choices and evidence through handoffs. Missing technical flags never require configuration questions. Atlas recommends KPIs and asks only for unsettled priorities, user values or authority through the permitted native question tool. Evolution starts at the smallest useful level and expands when evidence rules out the current approach; `--evolve [next|leap|transform]` overrides that selection. Explicit read-only, scope, model and resource limits remain binding.
 
 Available specialist skills can supply bounded context or work through `skills/scope/references/composition.md`. Atlas owns software proof; a Spotter parent owns life priorities and personal knowledge. Neither plugin is required by the other. A visited owner/capability chain prevents mutual controller loops; relevant evidence returns to the same map.
 
+Use `/atlas:reverse <result or PR>` (Cursor: `/atlas-reverse`) for a concise human drilldown followed by an isolated minimal directive ready for the next agent. Every expanded result ends in that distillation: `--drilldown` opens mechanisms, evidence and limits; `--kit` opens actual implementations and adaptation checks. Only supported practices enter the directive; decisive qualifiers remain visible. Learning integrates the rules at their authorized point of use and distinguishes case success, documented knowledge, activation and actual reuse. Read-only returns the directive without writes.
+
+Every workflow reuses applicable practices at entry and sends new verified outcome evidence through the same reverse/learning loop. `improve` uses that evidence to select the next bounded improvement; build, optimize, simplify, review and ship reuse receipts. Learn owns deduplication and the narrowest destination: repository discoveries stay local, private facts stay private, and transferable methods reach their canonical skill after transfer proof and authorized installation. Each real reuse measures outcome and total cost against the prior comparable method; compound gains are observed, not added from isolated wins. Unchanged evidence adds no work. Known local lessons can enter the planned commit; later evidence remains a separate follow-up to the verified PR head.
+
+Global learning is active only after authorized native installation and content/load-path read-back, including separately refreshed snapshotting services. Source changes are never made in versioned caches. Later relevant work validates the lesson's preconditions and applies it, retaining actual-use evidence; contradictions narrow or supersede the same rule. No new memory database, automatic publication, or repetition of approval already supplied.
+
 Build owns an adaptive agency cycle: recover the user's mandate, derive necessary technical subgoals, choose available tools or specialists, act, verify the actual result and revise the next feasible actions. The same issue/plan retains scope, authority, proof and continuation. Independent authorized work continues around blockers; completion requires the enclosing acceptance and requested delivery. Native goals/triggers supply continuity only when available and explicitly activated; ordinary work needs no substitute goal or new runtime.
+
+An explicit continuous-until request binds an available native goal; a requested interval/event check uses native loop/scheduling primitives. Codex reads/reuses its current goal and supports only advertised lifecycle statuses; Claude uses `/goal` and `/loop` or its native cron tools. One owner retains the full acceptance condition. A plugin-configuration request alone activates neither.
+
+Optimize checkpoints every verified gain, including useful alternatives: local commit, retained lightweight ref and ledger read-back before promotion or another round. Normal cleanup removes disposable worktrees, preserving checkpoint history. PR delivery publishes an exact-BASE/HEAD dossier with complete changed-path accounting and domain/file drilldown; combined PR/dossier flags do not stop at preparation.
+
+For genuinely branching technical decisions, one read-only `atlas-branch-analyst` can own each material branch. The coordinator opens necessary descendants under one shared allowance, then returns child balances to the root. Defaults are three concurrent analysts and nine total branch analyses; explicit/inherited bounds win. This is separate from optional actor simulation and its limits.
 
 After `atlasme` settles an authorized implementation request, Atlas executes `howto` → `scope` → `build` → `review` in the same turn. An operational plan materializes missing outcome tickets before execution, reuses existing IDs, records priority/dependencies and maintains status/proof through delivery. `--tickets` also requests this for a small change; it is no longer required after an operational plan. A repository declares its tracker in one line, `atlas: tracker=<name> [project=<container>]`, in its own or an ancestor's AGENTS.md or CLAUDE.md, which `scripts/tracker.sh` reports as `declared=`; precedence runs explicit native owner, declared tracker, detected forge with an authenticated CLI, then authorized local files under `docs/tickets/`. Selecting a store is not write authority, and every stage report shows the `tickets:` line it read back. An unavailable declared remote remains an explicit blocked write, never a silent fallback. Every record and relation needs read-back. Matching GitHub, GitLab, Linear, Jira and Azure issues are the tickets themselves: refresh their current fields on entry, resume and authorized check-ins, write only authorized changes, then read back. Existing plans keep links and dated projections; remote conflicts or failed writes remain pending instead of overwriting team changes. Card-only, assessment-only and explicitly disabled tracking retain their boundaries.
 
@@ -193,7 +206,7 @@ One hooks file per host family — the events and the output shape differ, so
 they do not share a file. All scripts are POSIX `sh` + `python3 -c` (no node,
 no jq):
 
-- `hooks/hooks.json` — Claude Code and Codex. `SessionStart` and
+- `hooks/claude-codex.json` — Claude Code and Codex. `SessionStart` and
   `SubagentStart` run `scripts/core-context.sh`, which injects
   `core/ATLAS.md` as `additionalContext` so the doctrine is active
   every turn and inside every subagent. `SubagentStart` has no matcher, so it
@@ -237,7 +250,7 @@ its hooks file.
 ## Codex notes
 
 - Skills: same files, invoked as `$name` instead of `/atlas:name`.
-- Hooks: same `hooks/hooks.json`; trust it once in `/hooks` (see Install).
+- Hooks: same `hooks/claude-codex.json`; trust it once in `/hooks` (see Install).
 - Agents: not bundled — `scripts/install-codex-agents.sh` generates
   `atlas_scout`, `atlas_worker`, `atlas_reviewer`, `atlas_integrator`
   (hyphens become underscores) as `~/.codex/agents/*.toml`; `build`,
@@ -257,7 +270,7 @@ block is present the hook injects nothing at either event, so the doctrine costs
 its tokens once. Teammates without the plugin get the same rules from the file.
 Re-run after a core update; the block is replaced, your sections stay.
 
-- Codex substitutes `${CLAUDE_PLUGIN_ROOT}` in `hooks/hooks.json` only. Inside a skill body neither host expands a variable, and Codex presents skills to the model as absolute skill roots, so every path in a skill is written relative to the file that names it (`<this skill>/scripts/…`, `<plugin root>/scripts/…`); `scripts/check.sh` fails on any `CLAUDE_SKILL_DIR` or `${CLAUDE_PLUGIN_ROOT}` inside a skill or agent.
+- Codex substitutes `${CLAUDE_PLUGIN_ROOT}` in `hooks/claude-codex.json` only. Inside a skill body neither host expands a variable, and Codex presents skills to the model as absolute skill roots, so every path in a skill is written relative to the file that names it (`<this skill>/scripts/…`, `<plugin root>/scripts/…`); `scripts/check.sh` fails on any `CLAUDE_SKILL_DIR` or `${CLAUDE_PLUGIN_ROOT}` inside a skill or agent.
 
 ## Devin and Cursor notes
 

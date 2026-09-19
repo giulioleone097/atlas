@@ -1,0 +1,6 @@
+interface:
+  display_name: "Reverse"
+  short_description: "Distill winning practices into minimal rules"
+  default_prompt: "Use $reverse to trace this achieved result for human understanding, then finish with an isolated minimal directive ready for the next agent. Preserve decisive conditions; expand evidence or implementations when requested."
+policy:
+  allow_implicit_invocation: true

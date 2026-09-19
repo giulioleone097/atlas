@@ -2,7 +2,7 @@
 
 Use when the user asks for a retrospective on a session rather than a rule about the code. The subject is what the next agent will find waiting for it. Read the session's own record first; a category with no evidence in that record is not a candidate.
 
-Rank candidates by what actually cost time in that session, and present them before changing anything. One accepted candidate per run, same as a learning.
+Rank candidates by evidenced wasted work or failed outcomes in that session. Return only distinct reusable candidates to `learn.md`; it owns scope, authority, writing and verification. No fixed lesson quota.
 
 | Category | Look for | Trigger |
 |---|---|---|
@@ -13,6 +13,6 @@ Rank candidates by what actually cost time in that session, and present them bef
 | Tool economy | the command whose output flooded the context, the tool called in a loop, the query that returned a whole file to read one line | one call cost a visible share of the window |
 | Information access | the fact that existed but was not reachable: a log the agent could not read, a service with no read-only access | a question was answered by guessing because the source was out of reach |
 
-Two rules decide where a fix lands. Implementation carries the context pressure, so it gets navigation pointers and cheaper tools; review sees only a diff, so it gets the standards. And a steering file earns its lines by changing behavior: an instruction that no session has ever acted on is deleted, not reworded.
+Implementation benefits from useful navigation and cheaper reads; review needs the applicable standard. An unused instruction is a candidate for investigation, not proof that its safeguard is unnecessary. Narrow or remove only superseded or disproven guidance within scope after checking its callers and protected behavior.
 
-Write the accepted candidate the way this reference writes anything: the smallest durable change, in the file that owns it, shown to the user before it is written.
+Return the evidence, smallest durable change and proposed owner to `learn.md`. Its existing-authority gate applies; this reference adds no confirmation step or mutation authority.

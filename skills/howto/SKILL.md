@@ -31,6 +31,9 @@ evolution: <none|all|next|leap|transform>; reviewed inputs: <consequential sourc
 <observable outcome; acceptance/proof; constraints>
 
 ## Nodes
+graph: <stable node/type/parent/branch/prerequisite/input revision when branching is material; otherwise simple decisions>
+branch analyses: <actual analyst identities, completed/pending receipts and remaining shared allowance | inline/not needed>
+balance: <conditional leaf-to-parent/root comparison, affected ancestor revisions and decisive gaps>
 - [x] D1 <decision> -> <choice; material alternative/reason; evidence; reach/risk when relevant>. blocked by: <IDs | none>
 - [ ] D2 <decision> - blocked by: <IDs | none>; missing: <source or user choice>; state: <ready | waiting | deliberately deferred>
 

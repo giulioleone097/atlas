@@ -12,6 +12,8 @@ argument-hint: "[baseline | files] [overrides: --repo [path] --debt --rules]"
 
 4. Prove nothing moved with the smallest decisive existing check or real exercise; `sh <plugin root>/scripts/checks.sh <path>` locates commands when needed. Reuse still-valid results. Integrate locally unless several reports have substantial cross-area interactions; then use `atlas-integrator` (Codex: `atlas_integrator`) with the task diff, proposals, applied edits, proof and the `consumers` list or `none`. Sweep consumers only when a changed contract warrants it. Report unavailable proof and attribute failures before calling them regressions.
 
+After a verified change, run `<plugin root>/skills/ship/references/learn.md` on material new outcome evidence unless its receipt is current. It reverses the useful method and validates reuse within existing authority; line reduction alone proves no gain. Preserve read-only limits and recheck proof affected by a learning edit.
+
 5. Print one line per cut, tag first:
 
 ```

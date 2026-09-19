@@ -2,6 +2,8 @@
 
 Optimize owns this contract. Presets are starting points, not compulsory metrics, targets or new dependencies. Read only evidence relevant to the requested outcome.
 
+Efficacy and efficiency hold together: prefer a demonstrated equally sound result with less end-to-end time, effort or maintained code; never lower outcome quality to improve a proxy. Include verification/rework and user/reader effort when material. Compare like workloads and scopes. Lines/words are diagnostics under consistent formatting and full content coverage, not optimization targets in themselves; measured savings require comparable evidence, not claims from a shorter diff.
+
 | Preset | Suggested primary metric | Direction | Companion checks or guards |
 |---|---|---|---|
 | Latency / duration | p95 request latency in ms, or elapsed build/task seconds | Lower | Same workload and concurrency; correctness, error rate |
