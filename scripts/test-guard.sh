@@ -36,5 +36,49 @@ total=$((total + 1))
 total=$((total + 1))
 [ -z "$(printf '' | sh scripts/guard.sh)" ] && pass=$((pass + 1)) || echo "FAIL: empty stdin produced output"
 
-echo "guard: $pass/$total ok"
-[ "$pass" -eq "$total" ] || exit 1
+# The cases above all arrive as tool_input.command, the Claude/Codex shape. guard.sh also
+# reads Devin write_to_process (text_input, bytes_input) and Cursor beforeShellExecution
+# (command at top level); a regression in those branches would ship silently otherwise.
+# shape <label> <python expression building the payload from argv[1]> <want deny|allow>
+shape() {
+  total=$((total + 1))
+  out=$(python3 -c "import sys,json;sys.stdout.write(json.dumps($2))" "$3" | sh scripts/guard.sh)
+  case "$out" in
+    *'"permissionDecision": "deny"'*) got=deny ;;
+    *) got=allow ;;
+  esac
+  if [ "$got" = "$4" ]; then pass=$((pass + 1)); else echo "FAIL (want $4, got $got): $1"; fi
+}
+
+CLAUDE_SHAPE='{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}'
+TEXT_SHAPE='{"hook_event_name":"PreToolUse","tool_name":"write_to_process","tool_input":{"text_input":sys.argv[1]}}'
+BYTES_SHAPE='{"hook_event_name":"PreToolUse","tool_name":"write_to_process","tool_input":{"bytes_input":sys.argv[1]}}'
+CURSOR_SHAPE='{"command":sys.argv[1],"cwd":"/tmp"}'
+
+for s in "$CLAUDE_SHAPE" "$TEXT_SHAPE" "$BYTES_SHAPE" "$CURSOR_SHAPE"; do
+  shape "deny via $s" "$s" 'git push --force origin main' deny
+  shape "deny via $s" "$s" 'rm -rf /' deny
+  shape "allow via $s" "$s" 'git push -u origin main' allow
+  shape "allow via $s" "$s" 'ls -la' allow
+done
+
+# One payload has to answer every host: each reads the field it knows, and a host whose
+# field is missing sees no denial at all.
+total=$((total + 1))
+missing=$(printf '{"tool_input":{"command":"rm -rf /"}}' | sh scripts/guard.sh | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+want = {
+    'claude/codex': d.get('hookSpecificOutput', {}).get('permissionDecision') == 'deny',
+    'devin': d.get('decision') == 'block' and bool(d.get('reason')),
+    'cursor': d.get('permission') == 'deny' and bool(d.get('user_message')),
+}
+print(','.join(k for k, ok in want.items() if not ok))")
+if [ -z "$missing" ]; then pass=$((pass + 1)); else echo "FAIL: deny payload missing host fields: $missing"; fi
+
+if [ "$pass" -eq "$total" ]; then
+  echo "guard: $pass/$total ok"
+else
+  echo "guard: $pass/$total"
+  exit 1
+fi
