@@ -4,7 +4,8 @@
 # Codex and Devin read hookSpecificOutput.additionalContext (event
 # SessionStart/SubagentStart), Cursor reads top-level additional_context
 # (event sessionStart). hookEventName comes from the hook_event_name field on
-# stdin, default SessionStart. Any parse or read error: print nothing, exit 0.
+# stdin, default SessionStart. Unreadable stdin falls back to the process cwd
+# and still injects; only an unreadable core prints nothing. Both exit 0.
 
 CORE_FILE="$(dirname "$0")/../core/ATLAS.md"
 
@@ -12,6 +13,12 @@ exec python3 -c '
 import os, sys, json
 
 core_path = sys.argv[1]
+
+try:
+    with open(core_path, "r") as f:
+        core = f.read()
+except Exception:
+    sys.exit(0)
 
 event = "SessionStart"
 data = {}
@@ -25,19 +32,39 @@ try:
 except Exception:
     pass
 
-# A project that carries the block (installed by the atlas setup skill, or by /sniper:setup
-# before the rename — both markers mean the doctrine is already loaded) already loads it as
-# project instructions, and non-fork subagents receive the same instruction files; injecting
-# again would cost the doctrine twice. The hook runs in the session cwd, which may be a
+# A project that carries THIS doctrine (installed by the atlas setup skill, or by /sniper:setup
+# before the rename — both marker pairs mean the same block) already loads it as project
+# instructions, and non-fork subagents receive the same instruction files; injecting again
+# would cost the doctrine twice. A block whose text no longer matches core/ATLAS.md is a
+# frozen copy from an older install: the marker alone must not suppress the current doctrine,
+# or the update never reaches the user. The hook runs in the session cwd, which may be a
 # subdirectory, so the block is looked for up the tree to the filesystem root.
-BLOCK_MARKERS = ("<!-- atlas:core:start -->", "<!-- sniper:core:start -->")
+MARKER_PAIRS = (
+    ("<!-- atlas:core:start -->", "<!-- atlas:core:end -->"),
+    ("<!-- sniper:core:start -->", "<!-- sniper:core:end -->"),
+)
+
+
+def carries_current(text, core):
+    for start, end in MARKER_PAIRS:
+        i = text.find(start)
+        if i < 0:
+            continue
+        j = text.find(end, i + len(start))
+        if j < 0:
+            continue
+        if text[i + len(start):j].strip() == core.strip():
+            return True
+    return False
+
+
 cwd = data.get("cwd") if isinstance(data, dict) else None
 d = os.path.abspath(cwd) if cwd else os.getcwd()
 while d:
     for name in ("AGENTS.md", "CLAUDE.md"):
         try:
             text = open(os.path.join(d, name)).read()
-            if any(m in text for m in BLOCK_MARKERS):
+            if carries_current(text, core):
                 sys.exit(0)
         except Exception:
             pass
@@ -56,7 +83,7 @@ if not is_cursor:
     for name in (".config/devin/AGENTS.md", ".claude/CLAUDE.md", ".codex/AGENTS.md"):
         try:
             text = open(os.path.join(home, name)).read()
-            if any(m in text for m in BLOCK_MARKERS):
+            if carries_current(text, core):
                 sys.exit(0)
         except Exception:
             pass
@@ -75,12 +102,6 @@ if event == "SubagentStart":
                 sys.exit(0)
         except re.error:
             pass
-
-try:
-    with open(core_path, "r") as f:
-        core = f.read()
-except Exception:
-    sys.exit(0)
 
 payload = {
     "hookSpecificOutput": {
