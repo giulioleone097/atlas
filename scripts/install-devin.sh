@@ -149,6 +149,7 @@ open(cfg_path, "w").write(json.dumps(cfg, indent=2) + "\n")
 PYEOF
 
 n=$(ls -d "$DEVIN_DIR"/skills/atlas-*/ 2>/dev/null | wc -l | tr -d ' ')
-echo "atlas: installed for Devin in $DEVIN_DIR ($n skills, 4 agents, doctrine, guard)"
+agent_count=$(ls -1 "$DEVIN_DIR"/agents/atlas-*.md 2>/dev/null | wc -l | tr -d ' ')
+echo "atlas: installed for Devin in $DEVIN_DIR ($n skills, $agent_count agents, doctrine, guard)"
 echo "atlas: open a new Devin session; stages answer to /atlas-<stage>"
 echo 'atlas: when `devin auth login` is done, `devin plugins install giulioleone097/atlas` replaces this'
