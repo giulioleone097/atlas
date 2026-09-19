@@ -2,7 +2,7 @@
   "name": "atlas",
   "hooks": "./hooks/claude-codex.json",
   "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
-  "version": "2.10.2",
+  "version": "2.11.3",
   "author": {
     "name": "Giulio Leone",
     "url": "https://github.com/giulioleone097"

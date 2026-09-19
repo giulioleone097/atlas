@@ -6,7 +6,7 @@ One plugin for the whole development loop, on Claude Code, Codex, Devin and Curs
 
 - No PRD/architecture/tech-doc quintuplets, no 50 KB skills, no telemetry, no required MCP server, no modes or intensity levels: one doctrine.
 - No per-language rule packs. Repository instructions (AGENTS.md / CLAUDE.md) own language conventions.
-- No separate learning database. `reverse` reconstructs practices behind achieved results, tests attribution and derives the minimum effective method within evidenced conditions. Automatic learning reuses that analysis; learn retains ownership, transfer proof and activation. Local discoveries stay with their project owner; personal knowledge stays private. Every learned rule has a discoverable load path and explicit source/activation state.
+- No separate learning database. `reverse` drills recursively from results through mechanisms, actual practices and enablers, then checks the method forward. Public reverse delivers working assets and an agent brief through playbook.md; context loads them at the next matching task, reusing proven solutions before redesign. Every material branch has a disposition; learn processes the complete supported practice set, including dependencies and pending activations. Each practice becomes a conditional default at its real point of use, with a verified load path and separate application/benefit evidence. Automatic learning reuses analysis; private/project facts retain their owners.
 - No dependency on any other plugin, server or registry. Every detector reads git, the filesystem and the CLIs the repository already uses.
 - No CHANGELOG/VERSION ceremony in `ship` unless the repository already has it.
 

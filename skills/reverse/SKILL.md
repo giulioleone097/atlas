@@ -1,17 +1,14 @@
 ---
 name: reverse
-description: Use when reverse engineering an achieved development result to identify which practices contributed, test their limits and internalize repeatable improvements.
+description: Use when reverse engineering achieved development results into a causal drilldown, reusable implementation assets and an operational brief for the next agent.
 ---
 
 1. Take the achieved result and available evidence from the request or current work. Read `<plugin root>/core/ATLAS.md` if not loaded; `<plugin root>` is the parent of `skills/`. Preserve scope, read-only limits and existing source/write authority. This entry reconstructs how a result was achieved; a future target alone is missing outcome evidence.
-2. Run `<this skill>/references/analyze.md`; `<this skill>` is this directory. Reuse a matching analysis receipt and refresh only changed evidence. The analysis returns supported practices, hypotheses, limits and the smallest useful reuse check.
-3. Pass that receipt to `<plugin root>/skills/ship/references/learn.md` for deduplication, ownership, validation and authorized activation. It reuses the analysis, never calls this entrypoint back. Read-only returns proposed rules without writes. An unsupported mechanism stays a candidate; saving or installing it cannot make it proven.
+2. Run `<this skill>/references/analyze.md`; `<this skill>` is this directory. It recursively traces mechanisms and enabling conditions to reproducible practices or exact gaps. Reuse matching nodes and refresh only changed evidence. Preserve the complete practice set, causal links and coverage; finding one useful lesson does not close other material branches.
+3. Compile the operational reuse kit through `<this skill>/references/playbook.md` before checking adoption: actual working assets -> exact reuse/adaptation instructions, focused checks and a ready-to-use agent brief. Deliver it even if all practices appear familiar; incomplete transfer evidence makes the method conditional, not absent.
+4. Pass the complete analysis and kit to `<plugin root>/skills/ship/references/learn.md` for per-practice ownership, execution-equivalence checks and authorized activation. It reuses both without invoking this entrypoint. Read-only produces the full method and proposed integrations without writes; unsupported mechanisms remain candidates.
+5. Reconcile every supported ID as implemented-in-case, documented for reuse, integrated at a future point of use, or pending with owner/reason/check. Case code and generic policy matches cannot establish future adoption. Keep coverage, method delivery, integration and actual reuse distinct.
 
-```text
-result: <verified outcome/source revision; baseline -> observed KPI, guards and total cost; gaps>
-practice: <action -> mechanism -> result; evidence, competing explanation and limits>
-reuse: <trigger/preconditions -> minimum effective action -> check/reopen condition>
-learning: <owner; candidate|unchanged|saved-local|validated-source|active-installed|blocked; proof and next real reuse>
-```
+Deliver the agent brief and actual reuse assets defined in `references/playbook.md` first; prose recipes alone are insufficient. Follow it with evidence drilldown, coverage/uncertainties and the adoption map. Never substitute a status-only receipt or an inventory of techniques.
 
-Merge the analysis and learning receipts on the existing work owner; show a graph only when useful. Stop after authorized checks/writes/read-backs or the exact evidence/activation gap. Return to an enclosing workflow without starting another optimization, commit or release.
+Keep one kit/drilldown on the appropriate owner and render nontrivial traces through the receiving-app contract. Stop after operational kit delivery, a usability exercise with its review mode stated, and truthful adoption states for all material practices, or return precise gaps. No new optimization, commit or release starts here.
