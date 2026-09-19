@@ -198,7 +198,7 @@ Seven read-only helpers let the skills use the repository's own commands instead
 | `scripts/debt.sh [repo]` | the ledger of declared shortcuts: every `ceiling:` comment with its limit and upgrade trigger, `no-trigger` on the ones that will rot | `review --debt`, `setup` (map) |
 | `scripts/pr-partition.py BASE HEAD` | the diff split into judgment, tests, mechanical, generated, docs and config, so only judgment code is read | `review`, `ship` (dossier) |
 
-`scripts/check.sh` is the plugin's own acceptance: four strict validations, the guard fixtures, manifest parity, doctrine sync, per-host hook event rules, and the repository rules executed (skill bodies under 120 lines, references under 80, no host env var inside a skill, every script parses, tracker, checks and debt detectors answer on this repo).
+`scripts/check.sh` is the plugin's own acceptance: four strict validations, the guard fixtures on every host payload shape, the doctrine-hook fixtures, the installer conformance run (each installer executed into a throwaway `HOME`, its tree asserted), manifest parity and declared components, doctrine sync, per-host hook event rules, and the repository rules executed (skill bodies under 120 lines, references under 80, no host env var inside a skill, every script parses, tracker, checks and debt detectors answer on this repo).
 
 ## Hooks
 

@@ -17,7 +17,7 @@ atlas/
   .claude-plugin/plugin.json, marketplace.json   Claude Code manifest and marketplace ("atlas", source "./")
   .codex-plugin/plugin.json, .agents/plugins/marketplace.json   Codex manifest and marketplace
   .devin-plugin/plugin.json       Devin manifest (highest manifest precedence there)
-  .cursor-plugin/plugin.json      Cursor manifest; declares hooks/cursor-hooks.json
+  .cursor-plugin/plugin.json      Cursor manifest; declares skills, rules, agents and hooks/cursor-hooks.json
   core/ATLAS.md                    the doctrine, injected at SessionStart and SubagentStart
   rules/atlas-core.mdc             Cursor rule: doctrine verbatim + alwaysApply (check.sh keeps it in sync)
   skills/<stage>/SKILL.md           5 stages and 9 named entry points (atlasme, simplify, handoff, optimize, intel, question, howto, prototype, improve), each under 120 lines
@@ -29,9 +29,11 @@ atlas/
   hooks/claude-codex.json                  Claude Code + Codex: SessionStart, SubagentStart, PreToolUse(Bash)
   hooks.json                        Devin (plugin-root convention): PreToolUse(exec|write_to_process)
   hooks/cursor-hooks.json           Cursor: beforeShellExecution; doctrine comes via the .mdc rule
-  scripts/core-context.sh, guard.sh, test-guard.sh   the hooks and the guard fixtures
+  scripts/core-context.sh, guard.sh                  the two hooks
+  scripts/test-guard.sh, test-core-context.sh, conformance.sh   their fixtures, and the installers executed
   scripts/checks.sh, tracker.sh, consumers.sh, tokens.sh, repo-facts.sh, debt.sh, pr-partition.py   detectors
-  scripts/install-codex-agents.sh, install-devin.sh, install-cursor.sh, check.sh   per-host user-level installers, one-command acceptance
+  scripts/install-codex-agents.sh, install-devin.sh, install-cursor.sh, install-antigravity.sh   per-host user-level installers
+  scripts/check.sh                  one-command acceptance, including the three executed suites
   evals/run.py, tasks.py            the agentic benchmark
   docs/atlas/map.md, conventions.md   the plugin's own map, built by its own setup
   AGENTS.md, .claude/CLAUDE.md      doctrine verbatim plus repo rules; CLAUDE.md imports it
@@ -92,7 +94,7 @@ One hooks file per host family — the events and output shapes differ, so no fi
 
 `core-context.sh` injects the doctrine, prints nothing at either event when an AGENTS.md or CLAUDE.md from the session directory up to the root already carries the block (non-fork subagents receive those files too), when a host-global rules file (`~/.config/devin/AGENTS.md`, `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`) carries it — Cursor payloads are recognised by their fields and skip that check since Cursor reads none of those files — and honours `ATLAS_SUBAGENT_MATCHER` (with `SNIPER_SUBAGENT_MATCHER` still read as fallback) to narrow which subagents receive it. Its payload carries both `hookSpecificOutput.additionalContext` (Claude, Codex, Devin) and top-level `additional_context` (Cursor); each host reads the field it knows.
 
-`guard.sh` denies `--no-verify`, force pushes, `reset --hard`, whole-tree discards, `clean -f` and `rm -rf` of the root, with 45 fixtures; any script error allows, so the guard never traps the user. It reads the command from `tool_input.command` (Claude, Codex, Devin `exec`), `tool_input.text_input`/`bytes_input` (Devin `write_to_process`) or top-level `command` (Cursor), and answers with the union of the hosts' deny shapes: `hookSpecificOutput.permissionDecision: deny`, `decision: block` + `reason`, `permission: deny` + `user_message`/`agent_message`. Scripts are POSIX shell plus `python3`, no node, no jq.
+`guard.sh` denies `--no-verify`, force pushes, `reset --hard`, whole-tree discards, `clean -f` and `rm -rf` of the root, with 75 fixtures covering all four host payload shapes; any script error allows, so the guard never traps the user. It reads the command from `tool_input.command` (Claude, Codex, Devin `exec`), `tool_input.text_input`/`bytes_input` (Devin `write_to_process`) or top-level `command` (Cursor), and answers with the union of the hosts' deny shapes: `hookSpecificOutput.permissionDecision: deny`, `decision: block` + `reason`, `permission: deny` + `user_message`/`agent_message`. Scripts are POSIX shell plus `python3`, no node, no jq.
 
 The user-level installers exist for hosts whose plugin manager is unavailable or unwanted: `install-devin.sh` writes `~/.config/devin/` (skills as `atlas-<stage>` with `atlas:` references rewritten to `atlas-`, agents verbatim, the doctrine block in the global `AGENTS.md`, and merged `config.json` hooks — SessionStart kept as a self-healing path whose dedup makes it a no-op while the block stands); `install-cursor.sh` writes `~/.cursor/` (same skills treatment, agents with `model:` reset to `inherit`, merged `hooks.json` carrying `sessionStart` + `beforeShellExecution`). Both are idempotent, preserve foreign entries, prune removed stages, and revert with `--remove`.
 
@@ -118,11 +120,11 @@ Every stage follows `skills/scope/references/asking.md` for tool selection, payl
 
 ## Evals
 
-A prompt change is a hypothesis until a session proves it. `evals/run.py` runs five probes as bare `claude -p` sessions in seeded temp workspaces, comparing baseline, current atlas, and optionally a preserved previous plugin directory, and scores the files left behind with stdlib-only scorers. Every scorer ships a good and a bad reference and `--selftest` must pass before a single call is spent; `check.sh` runs it. Cost, duration, and turns report medians over available cells with `available/total` coverage, so missing or partial metrics are not treated as zero. Live runs need `ANTHROPIC_API_KEY`, since bare mode reads no login; no gain claim is made without live comparison results.
+A prompt change is a hypothesis until a session proves it. `evals/run.py` runs six probes as bare `claude -p` sessions in seeded temp workspaces, comparing baseline, current atlas, and optionally a preserved previous plugin directory, and scores the files left behind with stdlib-only scorers. Every scorer ships a good and a bad reference and `--selftest` must pass before a single call is spent; `check.sh` runs it. Cost, duration, and turns report medians over available cells with `available/total` coverage, so missing or partial metrics are not treated as zero. Live runs need `ANTHROPIC_API_KEY`, since bare mode reads no login; no gain claim is made without live comparison results.
 
 ## Acceptance
 
-`sh scripts/check.sh`: four `claude plugin validate --strict` targets, the guard fixtures, manifest JSON, doctrine sync across `AGENTS.md` and `rules/atlas-core.mdc`, version parity across the four plugin manifests, per-host hook event rules (each hooks file may name only events its host fires, and the three installers plus the `.mdc` must exist), and the repository rules executed: skill bodies under 120 lines, references under 80, no host variable inside a skill or agent, every skill with a Codex sidecar, every file a skill names present, every script parsing, the detectors answering on this repository, the ledger answering, the evals selftest passing, the doctrine under 9,000 bytes (hook `additionalContext` is cut at 10,000 characters on Claude Code and near 2,500 tokens on Codex). After a change: bump all four manifests, `claude plugin update atlas@atlas`, `codex plugin remove atlas` then `codex plugin add atlas@atlas`, `devin plugins update atlas` or reinstall on Cursor, re-run `scripts/install-*.sh` where they were used, and `scripts/install-codex-agents.sh` when an agent changed.
+`sh scripts/check.sh`: four `claude plugin validate --strict` targets, the three executed suites (`test-guard.sh` on all four host payload shapes, `test-core-context.sh` on the doctrine hook, and `conformance.sh`, which runs every installer into a throwaway `HOME` and asserts the tree it produces), manifest JSON and declared components, doctrine sync across `AGENTS.md` and `rules/atlas-core.mdc`, version parity across the four plugin manifests, per-host hook event rules (each hooks file may name only events its host fires, and the four installers plus the `.mdc` must exist), and the repository rules executed: skill bodies under 120 lines, references under 80, no host variable inside a skill or agent, every skill with a Codex sidecar, every file a skill names present, every script parsing, the detectors answering on this repository, the ledger answering, the evals selftest passing, the doctrine under 9,000 bytes (hook `additionalContext` is cut at 10,000 characters on Claude Code and near 2,500 tokens on Codex). After a change: bump all four manifests, `claude plugin update atlas@atlas`, `codex plugin remove atlas` then `codex plugin add atlas@atlas`, `devin plugins update atlas` or reinstall on Cursor, re-run `scripts/install-*.sh` where they were used, and `scripts/install-codex-agents.sh` when an agent changed.
 
 ## Sources
 

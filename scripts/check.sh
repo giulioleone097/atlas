@@ -1,6 +1,7 @@
 #!/bin/sh
-# atlas acceptance in one command: manifests, components, guard fixtures, doctrine sync.
-# Exit 1 on the first failing group; prints what failed.
+# atlas acceptance in one command: manifests, components, doctrine sync, and the three
+# executed suites — the guard on every host payload shape, the doctrine hook, and the
+# installers run into a throwaway HOME. Exit 1 on any failing group; prints what failed.
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 fail=0
@@ -14,6 +15,8 @@ for t in "" .claude-plugin/plugin.json skills agents; do
 done
 
 sh "$ROOT/scripts/test-guard.sh" || fail=1
+sh "$ROOT/scripts/test-core-context.sh" || fail=1
+sh "$ROOT/scripts/conformance.sh" || fail=1
 
 # Repository rules, executed: skill bodies <= 120 lines, references <= 80, no host-specific
 # env var in a skill body (Codex knows none of them there), every script parses, and the
@@ -95,9 +98,25 @@ for path, allowed in EVENTS.items():
     if unknown:
         print(f"rules: {path} names events its host never fires: {sorted(unknown)}"); bad += 1
 for f in ("scripts/install-devin.sh", "scripts/install-cursor.sh",
-          "scripts/install-codex-agents.sh", "rules/atlas-core.mdc"):
+          "scripts/install-codex-agents.sh", "scripts/install-antigravity.sh",
+          "rules/atlas-core.mdc"):
     if not os.path.exists(f"{root}/{f}"):
         print(f"rules: {f} missing"); bad += 1
+
+# A manifest that omits a component the host needs ships an empty plugin, and JSON that
+# parses says nothing about that. Each key must also resolve to a path that exists.
+import json as _json
+for manifest, keys in (
+    (".codex-plugin/plugin.json", ("skills", "hooks")),
+    (".cursor-plugin/plugin.json", ("skills", "rules", "agents", "hooks")),
+    (".claude-plugin/plugin.json", ("hooks",)),
+):
+    m = _json.load(open(f"{root}/{manifest}"))
+    for key in keys:
+        if key not in m:
+            print(f"rules: {manifest} declares no {key}"); bad += 1
+        elif not os.path.exists(os.path.join(root, m[key].lstrip("./"))):
+            print(f"rules: {manifest} {key} -> {m[key]} does not exist"); bad += 1
 sys.exit(1 if bad else 0)
 PYEOF
 

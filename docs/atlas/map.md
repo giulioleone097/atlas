@@ -12,7 +12,7 @@ Un plugin per Claude Code, Codex, Devin e Cursor, con adapter nativo di skill e 
 - Guardie: `scripts/guard.sh` (nega `--no-verify`, force push, `reset --hard`, scarti dell'intero albero, `rm -rf` della radice; legge `tool_input.command`, `text_input`/`bytes_input` o `command` e risponde con l'unione delle forme deny dei quattro host); fixture in `scripts/test-guard.sh`. File hook per famiglia: `hooks/claude-codex.json` (Claude+Codex), `hooks.json` alla radice (Devin), `hooks/cursor-hooks.json` (Cursor, dichiarato nel manifest).
 - Rilevatori: `scripts/checks.sh` (comandi di verifica del progetto), `tracker.sh` (forge e CLI, con gh e glab sondati per un host enterprise o self-hosted), `consumers.sh` (repository dipendenti), `tokens.sh` (token di design), `repo-facts.sh` (fatti per la mappa), `debt.sh` (registro dei `ceiling:`), `pr-partition.py` (partizione del diff); `skills/ship/scripts/` tiene `pr-contracts.py`, `pr-walkthrough.py`, `test-summary.py`.
 - Installer user-level: `scripts/install-devin.sh` e `scripts/install-cursor.sh` (skill come `atlas-<stage>` con riferimenti riscritti, agenti, dottrina/hook, idempotenti e reversibili con `--remove`) per dove il plugin manager non arriva. `scripts/install-antigravity.sh` installa skill/riferimenti/helper e dottrina in `~/.gemini/config/plugins/atlas`, senza registrazione di hook o agenti nativi.
-- Evals: `evals/run.py` e `evals/tasks.py`, cinque sonde in sessioni headless `--bare` con baseline, plugin corrente e plugin precedente opzionale, con riferimenti buono/cattivo; il selftest gira in `check.sh`, la corsa live richiede `ANTHROPIC_API_KEY` e le metriche mancanti restano non disponibili.
+- Evals: `evals/run.py` e `evals/tasks.py`, sei sonde in sessioni headless `--bare` con baseline, plugin corrente e plugin precedente opzionale, con riferimenti buono/cattivo; il selftest gira in `check.sh`, la corsa live richiede `ANTHROPIC_API_KEY` e le metriche mancanti restano non disponibili.
 - Manifesti: `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.devin-plugin/plugin.json`, `.cursor-plugin/plugin.json` (versioni pari), il manifest Antigravity `plugin.json` è derivato dal manifest Codex durante l’installazione; marketplace in `.claude-plugin/marketplace.json` e `.agents/plugins/marketplace.json`.
 
 ## Flusso principale
@@ -33,7 +33,7 @@ Per ogni scelta materiale `scenarios.md` valuta il gate di interazione: scatta a
 Nessuno: `scripts/consumers.sh` non trova manifesti che nominino questo repository.
 
 ## Controlli
-- `sh scripts/check.sh`: quattro `claude plugin validate --strict`, 45 fixture del guard, JSON dei manifesti, sincronia della dottrina su AGENTS.md e rules/atlas-core.mdc, parità di versione sui quattro manifesti, eventi hook ammessi per host, regole del repository (limiti di righe, nessuna variabile di host, script che parsano, rilevatori che rispondono, descrizioni con il trigger in testa).
+- `sh scripts/check.sh`: quattro `claude plugin validate --strict`, 75 fixture del guard su tutte e quattro le forme di payload, 25 fixture di `core-context.sh`, la conformance degli installer eseguiti in una HOME usa-e-getta, JSON dei manifesti, sincronia della dottrina su AGENTS.md e rules/atlas-core.mdc, parità di versione sui quattro manifesti, eventi hook ammessi per host, regole del repository (limiti di righe, nessuna variabile di host, script che parsano, rilevatori che rispondono, descrizioni con il trigger in testa).
 - `scripts/checks.sh` non trova un manifesto di progetto: il controllo canonico è `check.sh`.
 
 ## Stato della mappa
