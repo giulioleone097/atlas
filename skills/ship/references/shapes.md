@@ -1,6 +1,6 @@
 # Shapes for a dossier
 
-One map for the whole change; then one diagram per domain: its before/after shape, or its own map when the change is who talks to whom, both only when neither alone carries the point. Smallest view that carries the point, and a shape at most sixteen lines: a shape needing a paragraph of explanation is the wrong shape, a shape without real names and real numbers is decoration, and a picture of only the changed nodes says nothing about blast radius - the neighbours that did **not** change stay in.
+Use the smallest view that explains the changed relationship. One overall map usually suffices; add a domain view only when it contributes different information. Omit diagrams when concise prose or a table makes the impact clear. Keep useful unchanged neighbours visible; diagrams are evidence/navigation, not decoration. Existing shape limits are readability ceilings, not content quotas.
 
 ## The map, once, after the plain-words list
 
