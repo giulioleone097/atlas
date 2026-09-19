@@ -1,14 +1,14 @@
 ---
 name: reverse
-description: Use when reverse engineering achieved development results into a causal drilldown, reusable implementation assets and an operational brief for the next agent.
+description: Use when distilling achieved development results into a minimal directive for the next agent, with causal evidence and reusable implementations available on drilldown.
+argument-hint: "[result or PR] [--drilldown | --kit]"
 ---
 
-1. Take the achieved result and available evidence from the request or current work. Read `<plugin root>/core/ATLAS.md` if not loaded; `<plugin root>` is the parent of `skills/`. Preserve scope, read-only limits and existing source/write authority. This entry reconstructs how a result was achieved; a future target alone is missing outcome evidence.
-2. Run `<this skill>/references/analyze.md`; `<this skill>` is this directory. It recursively traces mechanisms and enabling conditions to reproducible practices or exact gaps. Reuse matching nodes and refresh only changed evidence. Preserve the complete practice set, causal links and coverage; finding one useful lesson does not close other material branches.
-3. Compile the operational reuse kit through `<this skill>/references/playbook.md` before checking adoption: actual working assets -> exact reuse/adaptation instructions, focused checks and a ready-to-use agent brief. Deliver it even if all practices appear familiar; incomplete transfer evidence makes the method conditional, not absent.
-4. Pass the complete analysis and kit to `<plugin root>/skills/ship/references/learn.md` for per-practice ownership, execution-equivalence checks and authorized activation. It reuses both without invoking this entrypoint. Read-only produces the full method and proposed integrations without writes; unsupported mechanisms remain candidates.
-5. Reconcile every supported ID as implemented-in-case, documented for reuse, integrated at a future point of use, or pending with owner/reason/check. Case code and generic policy matches cannot establish future adoption. Keep coverage, method delivery, integration and actual reuse distinct.
+1. Bind the achieved result and available evidence to the request. Read `<plugin root>/core/ATLAS.md` if not loaded; <plugin root> is the parent of skills/. Preserve scope and authority. A future target alone is missing outcome evidence.
+2. Run `<this skill>/references/analyze.md`; <this skill> is this directory. Reuse current evidence and trace every material mechanism/practice, its dependencies and limits. This supporting analysis is not the default user-facing output.
+3. Distill the supported practices through `<this skill>/references/playbook.md` into a minimal directive a competent agent can apply. Use precise established method names and essential qualifiers; retain the detailed meaning and evidence behind them.
+4. Pass the directive and supporting receipt to `<plugin root>/skills/ship/references/learn.md` for authorized ownership, integration and reuse. Case implementation is not future adoption; familiar practices still reach the directive. Internal receipts do not expand the public response.
 
-Deliver the agent brief and actual reuse assets defined in `references/playbook.md` first; prose recipes alone are insufficient. Follow it with evidence drilldown, coverage/uncertainties and the adoption map. Never substitute a status-only receipt or an inventory of techniques.
+Use concise, navigable causal drilldown as the intermediate human layer when useful. Always finish with a separate ready-to-paste minimal directive, including after expanded analysis or assets; no inventory or status narration follows it. Preserve decisive qualifiers. A minimal-only request skips the human layer. --drilldown expands graph/evidence/limits; --kit or an explicit implementations request opens relevant assets and adaptation instructions.
 
-Keep one kit/drilldown on the appropriate owner and render nontrivial traces through the receiving-app contract. Stop after operational kit delivery, a usability exercise with its review mode stated, and truthful adoption states for all material practices, or return precise gaps. No new optimization, commit or release starts here.
+Stop after the distilled directive, requested expansion and authorized learning/read-back, or a precise blocking evidence gap. Preserve the complete supporting practice set without printing a mandatory dossier, kit, table or usage tutorial. No new optimization, commit or release starts here.
