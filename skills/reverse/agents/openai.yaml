@@ -1,6 +1,6 @@
 interface:
   display_name: "Reverse"
-  short_description: "Derive transferable principles from outcomes"
-  default_prompt: "Use $reverse to recursively trace why these strategies worked, derive causal principles that survive a different-domain challenge, and end with compact actionable rules. Preserve evidence and limits; do not stop at technique names or force a one-line slogan."
+  short_description: "Recover patterns and principles from outcomes"
+  default_prompt: "Use $reverse to recursively trace why these strategies worked, identify causal patterns across distinct instances and counterexamples, and derive principles that survive a different-domain challenge. End with compact named patterns and conditional rules; distinguish observed recurrence from candidates and validated transfer. Preserve evidence and limits; do not stop at technique names or force a one-line slogan."
 policy:
   allow_implicit_invocation: true

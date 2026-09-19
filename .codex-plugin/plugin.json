@@ -1,6 +1,6 @@
 {
   "name": "atlas",
-  "version": "2.11.7",
+  "version": "2.11.8",
   "description": "Context-aware software brainstorming, evolution, implementation and proof. Compose available specialist skills while keeping one outcome owner and independent operation.",
   "author": {
     "name": "Giulio Leone",
@@ -34,7 +34,7 @@
     "defaultPrompt": [
       "Use howto --evolve to explore this outcome from its existing context and carry the selected path through verified work.",
       "Build and review the change under the current goal card.",
-      "Use reverse to trace why this result worked and extract causal principles reusable across domains."
+      "Use reverse to recover causal patterns and conditional operating rules reusable across domains."
     ],
     "brandColor": "#2563EB",
     "composerIcon": "./assets/icon.png",
